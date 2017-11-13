@@ -13,11 +13,21 @@ public class Travel {
     private  String dates;
     private String cost;
 
+    public Travel(){
+        countury = "일본";
+        region = "도쿄";
+        dates="1/11";
+        cost="100만원";
+    }
+
+    public Travel(String countury){
+
+    }
     public static ArrayList<Travel> createTravelsList(int num){
         ArrayList<Travel> travel_items = new ArrayList<Travel>();
 
         //나중에 Travel_Item() 생성자 인자 넣어야됨
-        for(int i=1;i<=num;i++){
+        for(int i=1;i<num;i++){
             travel_items.add(new Travel());
         }
         return travel_items;

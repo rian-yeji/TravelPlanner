@@ -17,11 +17,12 @@ import java.util.List;
  */
 
 public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.ViewHolder>{
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder  {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView DdayTextView;
         public ImageButton detailTravelButton;
+        public ImageButton deleteTravelButton;
 
         private TravelListAdapter mTravels;
 
@@ -29,28 +30,37 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
-        public ViewHolder(Context context, View itemView, TravelListAdapter Travels) {
+        public ViewHolder(final Context context, View itemView, TravelListAdapter Travels) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
 
             DdayTextView = (TextView) itemView.findViewById(R.id.Dday_textView);
             detailTravelButton = (ImageButton) itemView.findViewById(R.id.detailTravelButton);
-
+            deleteTravelButton = (ImageButton) itemView.findViewById(R.id.deleteTravelButton);
             this.context = context;
             this.mTravels = Travels;
 
-            detailTravelButton.setOnClickListener(this);
+            detailTravelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getLayoutPosition(); // gets item position
+                    // We can access the data within the views
+                    Toast.makeText(context,"click!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            deleteTravelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getLayoutPosition(); // gets item position
+                    // We can access the data within the views
+                    Toast.makeText(context,"click!", Toast.LENGTH_SHORT).show();
+                    mTravels.removeItem(position);
+                }
+            });
         }
 
-        @Override
-        public void onClick(View view) {
-            int position = getLayoutPosition(); // gets item position
-            // We can access the data within the views
-            Toast.makeText(context,"click!", Toast.LENGTH_SHORT).show();
-            mTravels.removeItem(position);
-
-        }
     }
 
     // Store a member variable for the contacts
