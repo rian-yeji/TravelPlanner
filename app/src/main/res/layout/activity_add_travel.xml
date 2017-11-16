@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context="com.example.travelplanner.AddTravelActivity">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="New Travel"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Country" />
+
+        <EditText
+            android:id="@+id/country_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Region" />
+
+        <EditText
+            android:id="@+id/region_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Dates" />
+
+        <EditText
+            android:id="@+id/dates_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/insertButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="Insert" />
+
+</LinearLayout>

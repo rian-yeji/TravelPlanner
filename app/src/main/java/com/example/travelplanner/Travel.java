@@ -1,12 +1,13 @@
 package com.example.travelplanner;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by 이예지 on 2017-11-09.
  */
 
-public class Travel {
+public class Travel implements Serializable{
     //여행 나라, 여행 지역, 여행 날짜, 예상 경비
     private String countury;
     private String region;
@@ -20,9 +21,12 @@ public class Travel {
         cost="100만원";
     }
 
-    public Travel(String countury){
-
+    public Travel(String countury,String region,String date){
+        this.countury = countury;
+        this.region = region;
+        this.dates = date;
     }
+
     public static ArrayList<Travel> createTravelsList(int num){
         ArrayList<Travel> travel_items = new ArrayList<Travel>();
 
