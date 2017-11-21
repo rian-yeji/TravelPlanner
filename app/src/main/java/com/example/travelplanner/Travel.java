@@ -8,13 +8,15 @@ import java.util.ArrayList;
  */
 
 public class Travel implements Serializable{
-    //여행 나라, 여행 지역, 여행 날짜, 예상 경비
+    //여행 이름, 나라, 여행 지역, 여행 날짜, 예상 경비
+    private String title;
     private String countury;
     private String region;
     private  String dates;
     private String cost;
 
     public Travel(){
+        title="새 여행 샘플";
         countury = "일본";
         region = "도쿄";
         dates="1/11";
@@ -31,11 +33,20 @@ public class Travel implements Serializable{
         ArrayList<Travel> travel_items = new ArrayList<Travel>();
 
         //나중에 Travel_Item() 생성자 인자 넣어야됨
-        for(int i=1;i<num;i++){
+        for(int i=1;i<=num;i++){
             travel_items.add(new Travel());
         }
         return travel_items;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getCountury() {
         return countury;
     }

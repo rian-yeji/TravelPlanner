@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@color/colorAccent"
         android:orientation="horizontal">
@@ -24,9 +24,9 @@
             android:textSize="25sp" />
 
         <LinearLayout
-            android:layout_width="241dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.24"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -56,6 +56,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Title" />
 
                 <TextView
                     android:id="@+id/country_textView"

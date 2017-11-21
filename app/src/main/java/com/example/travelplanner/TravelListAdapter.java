@@ -20,7 +20,7 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder  {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView DdayTextView;
+        public TextView DdayTextView,titleTextView,countryTextView,regionTextView,datesTextView,costsTextView;
         public ImageButton detailTravelButton;
         public ImageButton deleteTravelButton;
 
@@ -35,7 +35,13 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            DdayTextView = (TextView) itemView.findViewById(R.id.Dday_textView);
+            DdayTextView = (TextView)itemView.findViewById(R.id.Dday_textView);
+            titleTextView = (TextView)itemView.findViewById(R.id.title_textView);
+            countryTextView = (TextView)itemView.findViewById(R.id.country_textView);
+            regionTextView = (TextView)itemView.findViewById(R.id.region_textView);
+            datesTextView = (TextView)itemView.findViewById(R.id.dates_textView);
+            costsTextView = (TextView)itemView.findViewById(R.id.cost_textView);
+
             detailTravelButton = (ImageButton) itemView.findViewById(R.id.detailTravelButton);
             deleteTravelButton = (ImageButton) itemView.findViewById(R.id.deleteTravelButton);
             this.context = context;
@@ -46,7 +52,7 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
                 public void onClick(View v) {
                     int position = getLayoutPosition(); // gets item position
                     // We can access the data within the views
-                    Toast.makeText(context,"click!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Detail click!", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -55,8 +61,8 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
                 public void onClick(View v) {
                     int position = getLayoutPosition(); // gets item position
                     // We can access the data within the views
-                    Toast.makeText(context,"click!", Toast.LENGTH_SHORT).show();
-                    mTravels.removeItem(position);
+                    Toast.makeText(context,"Remove click!", Toast.LENGTH_SHORT).show();
+                    //mTravels.removeItem(position);
                 }
             });
         }
@@ -98,6 +104,12 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         // Get the data model based on position
         Travel travel = mTravels.get(position);
 
+        viewHolder.titleTextView.setText(travel.getTitle());
+        viewHolder.countryTextView.setText(travel.getCountury());
+        viewHolder.regionTextView.setText(travel.getRegion());
+        viewHolder.datesTextView.setText(travel.getDates());
+        viewHolder.costsTextView.setText(travel.getCost());
+
         // Set item views based on your views and data model
         /*TextView textView = viewHolder.nameTextView;
         textView.setText(travel.getDates());
@@ -112,9 +124,10 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
     }
 
     public void removeItem(int p) {
-        mTravels.remove(p);
-        notifyItemRemoved(p);
-
+        if(mTravels!=null) {
+            mTravels.remove(p);
+            notifyItemRemoved(p);
+        }
     }
 
 }
