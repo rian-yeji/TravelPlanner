@@ -110,11 +110,6 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         viewHolder.datesTextView.setText(travel.getDates());
         viewHolder.costsTextView.setText(travel.getCost());
 
-        // Set item views based on your views and data model
-        /*TextView textView = viewHolder.nameTextView;
-        textView.setText(travel.getDates());
-        Button button = viewHolder.messageButton;
-        button.setText("Delete");*/
     }
 
     // Returns the total count of items in the list
@@ -124,6 +119,7 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
     }
 
     public void removeItem(int p) {
+        //DB에서 삭제
         if(mTravels!=null) {
             mTravels.remove(p);
             notifyItemRemoved(p);

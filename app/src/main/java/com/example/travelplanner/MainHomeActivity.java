@@ -40,6 +40,9 @@ public class MainHomeActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
 
+        RecyclerView.ItemDecoration itemDecoration = new MarginItemDecoration(20);
+        recyclerView.addItemDecoration(itemDecoration);
+
         setting();//데이터베이스에서 데이터 불러와서 화면 설정(리사이클러뷰)
     }
 
@@ -76,8 +79,8 @@ public class MainHomeActivity extends AppCompatActivity {
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(gridLayoutManager);
 
-                RecyclerView.ItemDecoration itemDecoration = new MarginItemDecoration(20);
-                recyclerView.addItemDecoration(itemDecoration);
+                /*RecyclerView.ItemDecoration itemDecoration = new MarginItemDecoration(20);
+                recyclerView.addItemDecoration(itemDecoration);*/
 
                 recyclerView.setHasFixedSize(true);
 
