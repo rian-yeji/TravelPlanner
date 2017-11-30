@@ -60,16 +60,15 @@ public class MainHomeActivity extends AppCompatActivity {
                 /*DB로딩*/
                 travel_items.clear();//초기화
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Travel tempTaravel = snapshot.getValue(Travel.class);
-                    Travel newTravel = new Travel();
+                    Travel newTravel = snapshot.getValue(Travel.class);
 
                     String getTitle = snapshot.getRef().getKey();
 
                     newTravel.setTitle(getTitle);
-                    newTravel.setCountry(tempTaravel.getCountry());
-                    newTravel.setRegion(tempTaravel.getRegion());
-                    newTravel.setDates(tempTaravel.getDates());
-                    newTravel.setCosts(tempTaravel.getCosts());
+                    newTravel.setCountry(newTravel.getCountry());
+                    newTravel.setRegion(newTravel.getRegion());
+                    newTravel.setDates(newTravel.getDates());
+                    newTravel.setCosts(newTravel.getCosts());
 
                     travel_items.add(newTravel);
                 }

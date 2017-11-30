@@ -20,12 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class DetailTravelActivity extends AppCompatActivity {
-  /*  title="새 여행 샘플";
-    country = "일본";
-    region = "도쿄";
-    dates="1/11";
-    costs="100만원";*/
+public class PlanActivity extends AppCompatActivity {
+    /*  title="새 여행 샘플";
+      country = "일본";
+      region = "도쿄";
+      dates="1/11";
+      costs="100만원";*/
     private EditText country;
     private EditText region;
     private EditText date;
@@ -43,7 +43,7 @@ public class DetailTravelActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_travel);
+        setContentView(R.layout.activity_plan);
 
         mContext = this;
         Intent intent = getIntent();
@@ -71,7 +71,7 @@ public class DetailTravelActivity extends AppCompatActivity {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-                Context context = DetailTravelActivity.this;
+                Context context = PlanActivity.this;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateSetListener, year, month, day);
                 datePickerDialog.show();
                 return true;
@@ -85,7 +85,7 @@ public class DetailTravelActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent= new Intent(mContext, MapActivity.class);
+                Intent intent= new Intent(mContext, AddMapActivity.class);
                 intent.putExtra("TravelDetail",travel);
                 mContext.startActivity(intent);
 

@@ -140,7 +140,7 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Travels");
         Travel travel = mTravels.get(p);
-        Intent intent= new Intent(mContext, DetailTravelActivity.class);
+        Intent intent= new Intent(mContext, PlanActivity.class);
         intent.putExtra("TravelDetail",travel);
         mContext.startActivity(intent);
 
@@ -152,21 +152,12 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         myRef = database.getReference("Travels");
         //DB에서 삭제
         if (mTravels != null) {
-            Travel travel = mTravels.get(p);
-            String childs = travel.getTitle();
-            Log.i("haneulhaneul",childs);
+            Travel gettravel = mTravels.get(p);
+            String childs = gettravel.getTitle();
             myRef.child(childs).setValue(null);
 
             mTravels.remove(p);
             notifyItemRemoved(p);
-
-            final Query travels = myRef.orderByPriority();
         }
     }
-
-   /* public String getItem(int position) {
-        String item;
-
-        return item;
-    }*/
 }

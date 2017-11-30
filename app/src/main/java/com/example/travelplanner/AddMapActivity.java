@@ -43,9 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallback{
 
-    protected static final String TAG = "MapActivity";
+    protected static final String TAG = "AddMapActivity";
     private PolylineOptions polylineOptions;
     private ArrayList<LatLng> arrayPoints;
     private GoogleMap mMap;
@@ -65,7 +65,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_add_map);
 
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
@@ -119,7 +119,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     String plan = snapshot.getValue(String.class);
                     Log.i("hahaneul", plan);
-                  //  mMap.addMarker(new MarkerOptions().position(-34, 151).title(plan));
+                    //  mMap.addMarker(new MarkerOptions().position(-34, 151).title(plan));
 
 
                 }
@@ -137,7 +137,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private int i=0;
 
     protected void updateMap() {

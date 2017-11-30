@@ -2,16 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.travelplanner">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -21,7 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAYMjuWVUUOSZCLB6kbLzs-0G1xC5dnrog" />
@@ -41,8 +35,8 @@
             android:name=".MainHomeActivity"
             android:label="MainHomeActivity" />
         <activity android:name=".AddTravelActivity" />
-        <activity android:name=".DetailTravelActivity"></activity>
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".AddMapActivity" />
+        <activity android:name=".PlanActivity"></activity>
     </application>
 
 </manifest>
