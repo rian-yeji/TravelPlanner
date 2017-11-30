@@ -100,7 +100,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         arrayPoints = new ArrayList<LatLng>();
 
         // Add a marker in Sydney and move the camera
-        LatLng seoul = new LatLng(37, 126);
+        LatLng seoul = new LatLng(38, 126);
         settingMap();
        /* for(int j=0;j<)
             myRef.child(travel.getTitle()).child("Plan").
