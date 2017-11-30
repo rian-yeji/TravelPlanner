@@ -1,7 +1,9 @@
 package com.example.travelplanner;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,23 +12,38 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by 이예지 on 2017-11-09.
  */
 
-public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.ViewHolder>{
-    public static class ViewHolder extends RecyclerView.ViewHolder  {
+public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.ViewHolder> {
+
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView DdayTextView,titleTextView,countryTextView,regionTextView,datesTextView,costsTextView;
+        public TextView DdayTextView, titleTextView, countryTextView, regionTextView, datesTextView, costsTextView;
         public ImageButton detailTravelButton;
         public ImageButton deleteTravelButton;
 
         private TravelListAdapter mTravels;
 
         private Context context;
+
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -35,12 +52,12 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            DdayTextView = (TextView)itemView.findViewById(R.id.Dday_textView);
-            titleTextView = (TextView)itemView.findViewById(R.id.title_textView);
-            countryTextView = (TextView)itemView.findViewById(R.id.country_textView);
-            regionTextView = (TextView)itemView.findViewById(R.id.region_textView);
-            datesTextView = (TextView)itemView.findViewById(R.id.dates_textView);
-            costsTextView = (TextView)itemView.findViewById(R.id.cost_textView);
+            DdayTextView = (TextView) itemView.findViewById(R.id.Dday_textView);
+            titleTextView = (TextView) itemView.findViewById(R.id.title_textView);
+            countryTextView = (TextView) itemView.findViewById(R.id.country_textView);
+            regionTextView = (TextView) itemView.findViewById(R.id.region_textView);
+            datesTextView = (TextView) itemView.findViewById(R.id.dates_textView);
+            costsTextView = (TextView) itemView.findViewById(R.id.cost_textView);
 
             detailTravelButton = (ImageButton) itemView.findViewById(R.id.detailTravelButton);
             deleteTravelButton = (ImageButton) itemView.findViewById(R.id.deleteTravelButton);
@@ -52,7 +69,8 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
                 public void onClick(View v) {
                     int position = getLayoutPosition(); // gets item position
                     // We can access the data within the views
-                    Toast.makeText(context,"Detail click!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Detail click!", Toast.LENGTH_SHORT).show();
+                    mTravels.updateItem(position);
                 }
             });
 
@@ -61,8 +79,8 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
                 public void onClick(View v) {
                     int position = getLayoutPosition(); // gets item position
                     // We can access the data within the views
-                    Toast.makeText(context,"Remove click!", Toast.LENGTH_SHORT).show();
-                    //mTravels.removeItem(position);
+                    Toast.makeText(context, "Remove click!", Toast.LENGTH_SHORT).show();
+                    mTravels.removeItem(position);
                 }
             });
         }
@@ -105,10 +123,10 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         Travel travel = mTravels.get(position);
 
         viewHolder.titleTextView.setText(travel.getTitle());
-        viewHolder.countryTextView.setText(travel.getCountury());
+        viewHolder.countryTextView.setText(travel.getCountry());
         viewHolder.regionTextView.setText(travel.getRegion());
         viewHolder.datesTextView.setText(travel.getDates());
-        viewHolder.costsTextView.setText(travel.getCost());
+        viewHolder.costsTextView.setText(travel.getCosts());
 
     }
 
@@ -118,12 +136,37 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         return mTravels.size();
     }
 
+    public void updateItem(int p) {
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("Travels");
+        Travel travel = mTravels.get(p);
+        Intent intent= new Intent(mContext, DetailTravelActivity.class);
+        intent.putExtra("TravelDetail",travel);
+        mContext.startActivity(intent);
+
+    }
+
+
     public void removeItem(int p) {
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("Travels");
         //DB에서 삭제
-        if(mTravels!=null) {
+        if (mTravels != null) {
+            Travel travel = mTravels.get(p);
+            String childs = travel.getTitle();
+            Log.i("haneulhaneul",childs);
+            myRef.child(childs).setValue(null);
+
             mTravels.remove(p);
             notifyItemRemoved(p);
+
+            final Query travels = myRef.orderByPriority();
         }
     }
 
+   /* public String getItem(int position) {
+        String item;
+
+        return item;
+    }*/
 }

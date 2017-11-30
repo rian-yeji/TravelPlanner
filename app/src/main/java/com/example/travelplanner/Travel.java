@@ -10,21 +10,21 @@ import java.util.ArrayList;
 public class Travel implements Serializable{
     //여행 이름, 나라, 여행 지역, 여행 날짜, 예상 경비
     private String title;
-    private String countury;
+    private String country;
     private String region;
-    private  String dates;
-    private String cost;
+    private String dates;
+    private String costs;
 
     public Travel(){
         title="새 여행 샘플";
-        countury = "일본";
+        country = "일본";
         region = "도쿄";
         dates="1/11";
-        cost="100만원";
+        costs="100만원";
     }
 
     public Travel(String countury,String region,String date){
-        this.countury = countury;
+        this.country = countury;
         this.region = region;
         this.dates = date;
     }
@@ -47,12 +47,12 @@ public class Travel implements Serializable{
         this.title = title;
     }
 
-    public String getCountury() {
-        return countury;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountury(String countury) {
-        this.countury = countury;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getRegion() {
@@ -71,11 +71,12 @@ public class Travel implements Serializable{
         this.dates = dates;
     }
 
-    public String getCost() {
-        return cost;
+    public String getCosts() {
+        return costs;
     }
 
-    public void setCost(String cost) {
-        this.cost = cost;
+    public void setCosts(String cost) {
+        this.costs = cost;
     }
+
 }

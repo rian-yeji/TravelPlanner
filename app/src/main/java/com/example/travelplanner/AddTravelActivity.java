@@ -27,7 +27,6 @@ public class AddTravelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_travel);
 
-
         insertButton = (Button)findViewById(R.id.insertButton);
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,11 +45,18 @@ public class AddTravelActivity extends AppCompatActivity {
 
     //새로운 여행 초기 시작값 및 생성
     private void addTravel(){
-        key = myRef.push().getKey();
-        myRef.child(key).child("title").setValue(title);
-        myRef.child(key).child("country").setValue(country);
-        myRef.child(key).child("region").setValue(region);
-        myRef.child(key).child("dates").setValue(dates);
-        myRef.child(key).child("costs").setValue("0");
+        DatabaseReference titleRef = database.getReference(title);
+        //key = titleRef.push().getKey();
+       // myRef.child(titleRef.getKey()).child(key).child("title").setValue(title);
+        myRef.child(titleRef.getKey()).child("country").setValue(country);
+        myRef.child(titleRef.getKey()).child("region").setValue(region);
+        myRef.child(titleRef.getKey()).child("costs").setValue("0");
+        myRef.child(titleRef.getKey()).child("dates").setValue(dates);
+      /*
+        myRef.child(titleRef.getKey()).child(key).child("country").setValue(country);
+        myRef.child(titleRef.getKey()).child(key).child("region").setValue(region);
+        myRef.child(titleRef.getKey()).child(key).child("costs").setValue("0");
+        myRef.child(titleRef.getKey()).child(key).child("dates").setValue(dates);*/
+
     }
 }

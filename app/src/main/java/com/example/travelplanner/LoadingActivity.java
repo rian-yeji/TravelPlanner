@@ -1,30 +1,30 @@
 package com.example.travelplanner;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-public class LoadingActivity extends AppCompatActivity {
-
-    private Handler mHandler;
-    Intent intent;
+public class LoadingActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        mHandler = new Handler();
-        mHandler.postDelayed( new Runnable() {
+        startLoading();
+    }
+
+    private void startLoading() { //3초뒤 mainActivity
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                intent = new Intent(LoadingActivity.this, LoginActivity.class);
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
-        },1000); //1초 뒤에 로그인 화면 실행
-        finish();
-
-
+        }, 1500);
     }
 }

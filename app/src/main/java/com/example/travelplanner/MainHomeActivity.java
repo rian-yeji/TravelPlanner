@@ -52,19 +52,24 @@ public class MainHomeActivity extends AppCompatActivity {
     }
 
     public void setting(){
-        Query travels = myRef.orderByPriority();
+        final Query travels = myRef.orderByPriority();
+
         travels.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*DB로딩*/
                 travel_items.clear();//초기화
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Travel tempTaravel = snapshot.getValue(Travel.class);
                     Travel newTravel = new Travel();
-                    newTravel.setTitle(snapshot.child("title").getValue(String.class));
-                    newTravel.setCountury(snapshot.child("country").getValue(String.class));
-                    newTravel.setRegion(snapshot.child("region").getValue(String.class));
-                    newTravel.setDates(snapshot.child("dates").getValue(String.class));
-                    newTravel.setCost(snapshot.child("costs").getValue(String.class));
+
+                    String getTitle = snapshot.getRef().getKey();
+
+                    newTravel.setTitle(getTitle);
+                    newTravel.setCountry(tempTaravel.getCountry());
+                    newTravel.setRegion(tempTaravel.getRegion());
+                    newTravel.setDates(tempTaravel.getDates());
+                    newTravel.setCosts(tempTaravel.getCosts());
 
                     travel_items.add(newTravel);
                 }
