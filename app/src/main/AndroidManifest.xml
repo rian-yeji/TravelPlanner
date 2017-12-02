@@ -36,7 +36,9 @@
             android:label="MainHomeActivity" />
         <activity android:name=".AddTravelActivity" />
         <activity android:name=".AddMapActivity" />
-        <activity android:name=".PlanActivity"></activity>
+        <activity android:name=".PlanActivity" />
+        <activity android:name=".CheckListActivity" />
+        <activity android:name=".DiaryActivity"></activity>
     </application>
 
 </manifest>

@@ -33,6 +33,8 @@ public class PlanActivity extends AppCompatActivity {
     private TextView dday;
     private ImageButton DetailPlanBtn;
     private ImageButton CostBtn;
+    private ImageButton checkListBtn;
+    private ImageButton diaryBtn;
 
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -99,6 +101,30 @@ public class PlanActivity extends AppCompatActivity {
             }
         });
 
+        checkListBtn = (ImageButton) findViewById(R.id.checkListBtn);
+        diaryBtn = (ImageButton) findViewById(R.id.diaryBtn);
+
+        checkListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent= new Intent(mContext, CheckListActivity.class);
+                intent.putExtra("TravelDetail",travel);
+                mContext.startActivity(intent);
+
+            }
+        });
+
+        diaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent= new Intent(mContext, DiaryActivity.class);
+                intent.putExtra("TravelDetail",travel);
+                mContext.startActivity(intent);
+
+            }
+        });
 
     }
 

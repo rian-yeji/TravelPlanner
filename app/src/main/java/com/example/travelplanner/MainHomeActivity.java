@@ -31,17 +31,17 @@ public class MainHomeActivity extends AppCompatActivity {
     public ArrayList<Travel> travel_items = new ArrayList<Travel>();
     String Tag = "MainHomeActivity";
     SQLiteDatabase sqLiteDatabase;
-    RecyclerView recyclerView;
+    RecyclerView travelsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_home);
 
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        travelsRecyclerView = (RecyclerView)findViewById(R.id.travelsRecyclerView);
 
         RecyclerView.ItemDecoration itemDecoration = new MarginItemDecoration(20);
-        recyclerView.addItemDecoration(itemDecoration);
+        travelsRecyclerView.addItemDecoration(itemDecoration);
 
         setting();//데이터베이스에서 데이터 불러와서 화면 설정(리사이클러뷰)
     }
@@ -78,15 +78,15 @@ public class MainHomeActivity extends AppCompatActivity {
                     travel_items.add(new Travel());
 
                 adapter = new TravelListAdapter(getApplicationContext(),travel_items);
-                recyclerView.setAdapter(adapter);
+                travelsRecyclerView.setAdapter(adapter);
 
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
-                recyclerView.setLayoutManager(gridLayoutManager);
+                travelsRecyclerView.setLayoutManager(gridLayoutManager);
 
                 /*RecyclerView.ItemDecoration itemDecoration = new MarginItemDecoration(20);
                 recyclerView.addItemDecoration(itemDecoration);*/
 
-                recyclerView.setHasFixedSize(true);
+                travelsRecyclerView.setHasFixedSize(true);
 
                 adapter.notifyDataSetChanged();
             }
