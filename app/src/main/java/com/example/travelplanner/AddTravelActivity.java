@@ -50,7 +50,7 @@ public class AddTravelActivity extends AppCompatActivity {
         myRef.child(titleRef.getKey()).child("region").setValue(region);
         myRef.child(titleRef.getKey()).child("country").setValue(country);
         myRef.child(titleRef.getKey()).child("dates").setValue(dates);
-        myRef.child(titleRef.getKey()).child("costs").setValue("경비");
+        myRef.child(titleRef.getKey()).child("costs").setValue("예산");
 
     }
 }

@@ -69,7 +69,6 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
                 public void onClick(View v) {
                     int position = getLayoutPosition(); // gets item position
                     // We can access the data within the views
-                    Toast.makeText(context, "Detail click!", Toast.LENGTH_SHORT).show();
                     mTravels.updateItem(position);
                 }
             });
@@ -79,7 +78,6 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
                 public void onClick(View v) {
                     int position = getLayoutPosition(); // gets item position
                     // We can access the data within the views
-                    Toast.makeText(context, "Remove click!", Toast.LENGTH_SHORT).show();
                     mTravels.removeItem(position);
                 }
             });

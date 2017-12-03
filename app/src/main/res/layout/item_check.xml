@@ -2,29 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
-
-        <ImageButton
-            android:id="@+id/modifyCheckListBtn"
+        <CheckBox
+            android:id="@+id/checkItemCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/checkItemTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="20"
             android:gravity="left|center"
-            android:padding="10dp"
             android:text="TextView" />
 
+        <TextView
+            android:id="@+id/modifyCheckListBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/text_button_blue"
+            android:gravity="center"
+            android:text="Edit" />
+
     </LinearLayout>
+
 </LinearLayout>

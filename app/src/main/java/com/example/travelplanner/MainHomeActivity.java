@@ -30,8 +30,8 @@ public class MainHomeActivity extends AppCompatActivity {
     TravelListAdapter adapter;
     public ArrayList<Travel> travel_items = new ArrayList<Travel>();
     String Tag = "MainHomeActivity";
-    SQLiteDatabase sqLiteDatabase;
     RecyclerView travelsRecyclerView;
+    ImageButton tavelAddBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +44,15 @@ public class MainHomeActivity extends AppCompatActivity {
         travelsRecyclerView.addItemDecoration(itemDecoration);
 
         setting();//데이터베이스에서 데이터 불러와서 화면 설정(리사이클러뷰)
-    }
 
-    public void onPlusButtonClicked(View v){
-        Intent intent = new Intent(MainHomeActivity.this,AddTravelActivity.class);
-        startActivity(intent);
+        tavelAddBtn = (ImageButton)findViewById(R.id.travelAddBtn);
+        tavelAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainHomeActivity.this,AddTravelActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void setting(){

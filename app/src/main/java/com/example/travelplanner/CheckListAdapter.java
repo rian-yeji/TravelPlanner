@@ -1,16 +1,22 @@
 package com.example.travelplanner;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -19,19 +25,22 @@ import java.util.ArrayList;
  */
 
 public class CheckListAdapter extends BaseAdapter {
-    private FirebaseDatabase database;
-    private DatabaseReference myRef;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();;
+    DatabaseReference travelsRef = database.getReference("Travels");
 
     Context context;
     ArrayList<CheckItem> checkList;
-    ImageButton modifyCheckListBtn;
+    TextView modifyCheckListBtn;
     TextView checkItemTextView;
+    CheckBox checkItemCheckBox;
     EditText newCheckList_editText;
+    Travel travel;
 
-    public CheckListAdapter(Context context,EditText newCheckList_editText,ArrayList<CheckItem> checkList){
+    public CheckListAdapter(Context context,EditText newCheckList_editText,ArrayList<CheckItem> checkList,Travel travel){
         this.context = context;
         this.newCheckList_editText = newCheckList_editText;
         this.checkList = checkList;
+        this.travel = travel;
     }
 
     public void addCheckItem(CheckItem checkItem) {
@@ -61,11 +70,11 @@ public class CheckListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_check, parent, false);
         }
 
-        CheckItem checkItem = checkList.get(position);
+        final CheckItem checkItem = checkList.get(position);
         checkItemTextView = (TextView) convertView.findViewById(R.id.checkItemTextView);
         checkItemTextView.setText(checkItem.getCheckItem());
 
-        modifyCheckListBtn = (ImageButton)convertView.findViewById(R.id.modifyCheckListBtn);
+        modifyCheckListBtn = (TextView) convertView.findViewById(R.id.modifyCheckListBtn);
         modifyCheckListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +82,47 @@ public class CheckListAdapter extends BaseAdapter {
             }
         });
 
+        checkItemCheckBox = (CheckBox)convertView.findViewById(R.id.checkItemCheckBox);
+        if(checkItem.getIsChecked().equals("true"))
+            checkItemCheckBox.setChecked(true);
+
+        checkItemCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                String isCheckedStr;
+                if(isChecked==true)
+                    isCheckedStr="true";
+                else
+                    isCheckedStr="false";
+                changeCheck(checkItem,isCheckedStr);
+                Log.i("CheckListAdapter","changeCheck");
+            }
+        });
         return convertView;
+    }
+    public void changeCheck(final CheckItem checkItem,final String isChecked){
+        DatabaseReference CheckListRef = travelsRef.child(travel.getTitle()).child("checkList");
+        CheckListRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("CheckListAdapter","changeCheck value="+checkItem.getCheckItem());
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    String key = snapshot.getKey(); //item이름이 나옴
+                    Log.i("CheckListAdapter","changeCheck key="+key);
+                    if(key.equals(checkItem.getCheckItem())){
+                        DatabaseReference checkItemRef = database.getReference(key);
+                        Log.i("CheckListAdapter","changeCheck item="+checkItemRef.getKey()+" check="+isChecked);
+                        //checkItemRef.setValue(isChecked);
+                        travelsRef.child(travel.getTitle()).child("checkList").child(checkItem.getCheckItem()).setValue(isChecked);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void modifyCheckList(int position) {
@@ -83,14 +132,13 @@ public class CheckListAdapter extends BaseAdapter {
     }
 
     public void deleteCheckList(int position) {
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Travels");
-
+        DatabaseReference ref = travelsRef.child(travel.getTitle()).child("checkList");
         if(checkList != null){
-            CheckItem checkItem = checkList.get(position);
-            String childstr = checkItem.getCheckItem();
-            myRef.child(childstr).setValue(null);
+            CheckItem item = checkList.get(position);
+            String checkItemStr = item.getCheckItem();
+            ref.child(checkItemStr).setValue(null);
 
+            //checkList.remove(position);
             notifyDataSetChanged();
         }
     }

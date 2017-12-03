@@ -6,11 +6,11 @@ package com.example.travelplanner;
 
 public class CheckItem {
     private String checkItem;
-    private boolean isChecked;
+    private String isChecked;
 
     public CheckItem(String checkItem){
         this.checkItem = checkItem;
-        this.isChecked = false;
+        this.isChecked = "false";
     }
 
     public String getCheckItem() {
@@ -21,11 +21,11 @@ public class CheckItem {
         this.checkItem = checkItem;
     }
 
-    public boolean isChecked() {
+    public String getIsChecked() {
         return isChecked;
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setIsChecked(String isChecked) {
+        this.isChecked = isChecked;
     }
 }

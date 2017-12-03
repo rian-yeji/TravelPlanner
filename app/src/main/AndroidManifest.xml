@@ -38,7 +38,9 @@
         <activity android:name=".AddMapActivity" />
         <activity android:name=".PlanActivity" />
         <activity android:name=".CheckListActivity" />
-        <activity android:name=".DiaryActivity"></activity>
+        <activity android:name=".DiaryActivity" />
+        <activity android:name=".AddDiaryActivity" />
+        <activity android:name=".ModifyDiaryActivity"></activity>
     </application>
 
 </manifest>
