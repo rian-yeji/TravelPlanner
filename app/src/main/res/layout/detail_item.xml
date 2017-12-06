@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:background="@drawable/text_button_fiil_white"
+    android:orientation="vertical"
+    android:layout_margin="7dp">
+
+    <TextView
+        android:id="@+id/detail_date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="top|bottom|center"
+        android:text="날짜" />
+
+    <TextView
+        android:id="@+id/detail_day"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="top|center"
+        android:text="요일" />
+</LinearLayout>

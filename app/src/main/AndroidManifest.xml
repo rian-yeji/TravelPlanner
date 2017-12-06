@@ -20,27 +20,28 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAYMjuWVUUOSZCLB6kbLzs-0G1xC5dnrog" />
 
-        <activity android:name=".LoadingActivity">
+        <activity android:name=".startActivity.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".startActivity.LoginActivity" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".startActivity.SignUpActivity"
             android:label="SignUpActivity" />
         <activity
-            android:name=".MainHomeActivity"
+            android:name=".addTravelActivity.MainHomeActivity"
             android:label="MainHomeActivity" />
-        <activity android:name=".AddTravelActivity" />
-        <activity android:name=".AddMapActivity" />
-        <activity android:name=".PlanActivity" />
-        <activity android:name=".CheckListActivity" />
-        <activity android:name=".DiaryActivity" />
-        <activity android:name=".AddDiaryActivity" />
-        <activity android:name=".ModifyDiaryActivity"></activity>
+        <activity android:name=".addTravelActivity.AddTravelActivity" />
+        <activity android:name=".detailActivity.AddMapActivity" />
+        <activity android:name=".detailActivity.PlanActivity" />
+        <activity android:name=".checkActivity.CheckListActivity" />
+        <activity android:name=".diaryActivity.DiaryActivity" />
+        <activity android:name=".diaryActivity.AddDiaryActivity" />
+        <activity android:name=".diaryActivity.ModifyDiaryActivity" />
+        <activity android:name=".detailActivity.DetailPlanActivity"></activity>
     </application>
 
 </manifest>

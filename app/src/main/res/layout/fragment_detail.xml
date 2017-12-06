@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#e0fdfafc"
+    tools:context="com.example.travelplanner.detailActivity.DetailFragment">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/PlanRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#e0fdfafc"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp" />
+
+
+</FrameLayout>
