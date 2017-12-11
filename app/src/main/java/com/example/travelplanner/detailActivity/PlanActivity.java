@@ -35,8 +35,8 @@ public class PlanActivity extends AppCompatActivity {
       costs="100만원";*/
     private EditText country;
     private EditText region;
-    private EditText startDate;
-    private EditText endDate;
+    private TextView startDate;
+    private TextView endDate;
     private EditText costs;
     private TextView dDay;
 
@@ -69,8 +69,8 @@ public class PlanActivity extends AppCompatActivity {
 
         country = (EditText) findViewById(R.id.Travelcountry);
         region = (EditText) findViewById(R.id.Travelregion);
-        startDate = (EditText) findViewById(R.id.TravelStartdate);
-        endDate = (EditText) findViewById(R.id.TravelEnddate);
+        startDate = (TextView) findViewById(R.id.TravelStartdate);
+        endDate = (TextView) findViewById(R.id.TravelEnddate);
         costs = (EditText) findViewById(R.id.Travelcost);
         dDay = (TextView) findViewById(R.id.Traveldday);
 

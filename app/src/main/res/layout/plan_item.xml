@@ -39,7 +39,8 @@
                 android:background="@color/colorAccent"
                 android:gravity="left|center"
                 android:paddingLeft="10dp"
-                android:text="비용" />
+                android:text="1000" />
+
             </LinearLayout>
 
             <LinearLayout

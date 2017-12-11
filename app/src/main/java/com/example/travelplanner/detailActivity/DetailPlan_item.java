@@ -1,6 +1,7 @@
 package com.example.travelplanner.detailActivity;
 
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.example.travelplanner.addTravelActivity.Travel;
@@ -16,17 +17,26 @@ public class DetailPlan_item {
     String time;
     Travel travel;
     Button mapBtn;
+    String titile;
 
 
-    int cost;
+    ImageButton planSaveBtn;
+    ImageButton planDeleteBtn;
+    int dayposition;
+    String cost;
     LinearLayout costLinear;
 
-    public DetailPlan_item(String location, String memo, String time, Button mapBtn, Travel travel/*, int cost, LinearLayout costLinear*/) {
+    public DetailPlan_item() {
+
+    }
+
+    public DetailPlan_item(String location, String memo, String time, Button mapBtn, Travel travel,int dayposition/*, int cost, LinearLayout costLinear*/) {
         this.location = location;
         this.memo = memo;
         this.time = time;
         this.mapBtn = mapBtn;
         this.travel = travel;
+        this.dayposition = dayposition;
       //  this.cost = cost;
       //  this.costLinear = costLinear;
     }
@@ -79,12 +89,47 @@ public class DetailPlan_item {
         this.costLinear = costLinear;
     }
 
-    public int getCost() {
+    public String getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(String cost) {
         this.cost = cost;
     }
+
+    public ImageButton getPlanSaveBtn() {
+        return planSaveBtn;
+    }
+
+    public void setPlanSaveBtn(ImageButton planSaveBtn) {
+        this.planSaveBtn = planSaveBtn;
+    }
+
+    public ImageButton getPlanDeleteBtn() {
+        return planDeleteBtn;
+    }
+
+    public void setPlanDeleteBtn(ImageButton planDeleteBtn) {
+        this.planDeleteBtn = planDeleteBtn;
+    }
+
+    public int getDayposition() {
+        return dayposition;
+    }
+
+    public void setDayposition(int dayposition) {
+        this.dayposition = dayposition;
+    }
+
+    public String getTitile() {
+        return titile;
+    }
+
+    public void setTitile(String titile) {
+        this.titile = titile;
+    }
+
+
+
 
 }

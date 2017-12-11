@@ -61,7 +61,7 @@ public class DetailPlanActivity extends AppCompatActivity {
 
                 fragment = new DetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt("position", position); // Object 넘기기
+                bundle.putInt("dayposition", position); // Object 넘기기
                 bundle.putSerializable("travel", travel);
                 fragment.setArguments(bundle);
                 Log.i("Test", "activity : " + position);
