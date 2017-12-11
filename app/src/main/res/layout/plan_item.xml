@@ -39,7 +39,7 @@
                 android:background="@color/colorAccent"
                 android:gravity="left|center"
                 android:paddingLeft="10dp"
-                android:text="1000" />
+                android:text="돈" />
 
             </LinearLayout>
 

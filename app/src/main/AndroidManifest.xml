@@ -35,7 +35,7 @@
             android:name=".addTravelActivity.MainHomeActivity"
             android:label="MainHomeActivity" />
         <activity android:name=".addTravelActivity.AddTravelActivity" />
-        <activity android:name=".detailActivity.AddMapActivity" />
+        <activity android:name=".detailActivity.Map.AddMapActivity" />
         <activity android:name=".detailActivity.PlanActivity" />
         <activity android:name=".checkActivity.CheckListActivity" />
         <activity android:name=".diaryActivity.DiaryActivity" />

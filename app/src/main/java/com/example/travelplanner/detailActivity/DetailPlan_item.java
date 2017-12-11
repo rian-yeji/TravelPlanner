@@ -37,8 +37,8 @@ public class DetailPlan_item {
         this.mapBtn = mapBtn;
         this.travel = travel;
         this.dayposition = dayposition;
-      //  this.cost = cost;
-      //  this.costLinear = costLinear;
+        //  this.cost = cost;
+        //  this.costLinear = costLinear;
     }
 
     public String getLocation() {

@@ -1,8 +1,7 @@
-package com.example.travelplanner.detailActivity;
+package com.example.travelplanner.detailActivity.Map;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -24,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,11 +56,17 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     protected Location mLastLocation;
     private TextView textView;
 
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Travels");
-    DatabaseReference planeRef = database.getReference("Plan");
     private Travel travel;
+    private int dayposition;
+    private int planposition;
 
+    private Map_item map_item = new Map_item();
+    private Marker m;
+
+    private LatLng location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,8 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
 
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
+        dayposition = intent.getIntExtra("dayposition",0);
+        planposition = intent.getIntExtra("planposition",0);
 
 
 
@@ -89,6 +97,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 input = editText.getText().toString();
+                map_item.setMarker(input);
                 searchAddress(getApplicationContext(),input);
             }
         });
@@ -99,18 +108,14 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
         mMap = googleMap;
         arrayPoints = new ArrayList<LatLng>();
 
-        // Add a marker in Sydney and move the camera
-        LatLng seoul = new LatLng(38, 127);
-        settingMap();
-       /* for(int j=0;j<)
-            myRef.child(travel.getTitle()).child("Plan").
-        myRef.child(travel.getTitle()).child("Plan").child("Day"+i).getKey();
-*/
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
+        LatLng place = new LatLng(38, 127);
+       // settingMap();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
     }
 
-    public void settingMap(){
-        final Query plans = planeRef.orderByPriority();
+    public void settingMap(){ //db 불러오기
+        final Query plans = myRef.orderByPriority();
 
         plans.addValueEventListener(new ValueEventListener() {
             @Override
@@ -120,8 +125,6 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
                     String plan = snapshot.getValue(String.class);
                     Log.i("hahaneul", plan);
                     //  mMap.addMarker(new MarkerOptions().position(-34, 151).title(plan));
-
-
                 }
             }
             @Override
@@ -142,10 +145,17 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
 
     protected void updateMap() {
         textView.setText("위도 : " + bestResult.getLatitude() + "경도 : " + bestResult.getLongitude());
-        LatLng location = new LatLng(bestResult.getLatitude(), bestResult.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(location).title(input));
+        location = new LatLng(bestResult.getLatitude(), bestResult.getLongitude());
+
+        if(m != null) {
+            m.remove();
+        }
+        ////////////////////////////////////////////////////
+        m = mMap.addMarker(new MarkerOptions().position(location).title(input));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-        polylineOptions = new PolylineOptions();
+
+       //////빨간줄 그어주는 코드
+        /*polylineOptions = new PolylineOptions();
 
         arrayPoints.add(location);
 
@@ -153,10 +163,23 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
         polylineOptions.width(5);
         arrayPoints.add(location);
         polylineOptions.addAll(arrayPoints);
-        mMap.addPolyline(polylineOptions);
+        mMap.addPolyline(polylineOptions);*/
 
         myRef.child(travel.getTitle()).child("Plan").child("Day"+i)/*setValue(input)*/;
         i++;
+
+        map_item.setLatitude(bestResult.getLatitude());
+        map_item.setLongitude(bestResult.getLongitude());
+        addMap(map_item);
+    }
+
+    private void addMap(Map_item map_item) {
+
+        DatabaseReference titleRef = database.getReference(travel.getTitle());
+        //날짜 추가 수정 필요
+        myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("Map").setValue(map_item);
+
+
     }
 
     @SuppressWarnings("MissingPermission")

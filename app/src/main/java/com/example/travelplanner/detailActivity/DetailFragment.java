@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.example.travelplanner.R;
 import com.example.travelplanner.addTravelActivity.Travel;
+import com.example.travelplanner.interfaces.Callnack;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,43 +43,27 @@ public class DetailFragment extends Fragment {
     private DatabaseReference myRef = database.getReference("Travels");
     FragmentManager fragmentManager;
 
-    public DetailFragment() {
-
-    }
-
+    public DetailFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-
-
         Bundle bundle = getArguments();
         dayposition = bundle.getInt("dayposition");
         Log.i("Test","fragment : "+ dayposition);
         travel = (Travel)bundle.getSerializable("travel");
 
-       // mapBtn = (Button)view.findViewById(R.id.mapActivityBtn);
+        // mapBtn = (Button)view.findViewById(R.id.mapActivityBtn);
 
         items = new ArrayList<DetailPlan_item>();
-        plan_Recycler_adapter = new Plan_Recycler_adapter(view.getContext(),items);
+        plan_Recycler_adapter = new Plan_Recycler_adapter(view.getContext(),items, callnack);
         recyclerView = (RecyclerView)view.findViewById(R.id.PlanRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(plan_Recycler_adapter);
 
         setting();
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-       /* plan_Recycler_adapter.setItemClick(new Plan_Recycler_adapter.ItemClick() {
-            @Override
-            public void onClick(View view, int position) {
-                costFragment = new CostFragment();
-                replaceFragment();
-            }
-        });
-*/
-       /* addPlan();*/
-
         return view;
     }
 
@@ -96,13 +81,7 @@ public class DetailFragment extends Fragment {
         Log.i("ADD","item ADD");
     }
 
-  /*  public void setCostText(String s) {
-        int cost = Integer.parseInt(s);
-        items.get(position).setCost(cost);
-    }*/
-
     public void setting() {
-
         String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Plan/Day"+dayposition;
         final DatabaseReference planRef = database.getReferenceFromUrl(url);
 
@@ -110,7 +89,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*DB로딩*/
-               items.clear();//초기화
+                items.clear();//초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     plan_item = snapshot.getValue(DetailPlan_item.class);
 
@@ -118,7 +97,6 @@ public class DetailFragment extends Fragment {
                     plan_item.setTime(plan_item.getTime());
                     plan_item.setLocation(plan_item.getLocation());
                     plan_item.setMemo(plan_item.getMemo());
-                    //plan_item.setMapBtn(mapBtn);
                     plan_item.setTravel(travel);
                     plan_item.setDayposition(dayposition);
 
@@ -126,15 +104,11 @@ public class DetailFragment extends Fragment {
                 }
 
 
-                plan_Recycler_adapter = new Plan_Recycler_adapter(getContext(), items);
+                plan_Recycler_adapter = new Plan_Recycler_adapter(getContext(), items,callnack);
                 recyclerView.setAdapter(plan_Recycler_adapter);
 
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(gridLayoutManager);
-
-                /*RecyclerView.ItemDecoration itemDecoration = new MarginItemDecoration(20);
-                recyclerView.addItemDecoration(itemDecoration);*/
-
                 recyclerView.setHasFixedSize(true);
 
                 plan_Recycler_adapter.notifyDataSetChanged();
@@ -146,5 +120,18 @@ public class DetailFragment extends Fragment {
             }
         });
     }
+
+    private Callnack callnack = new Callnack() {
+        @Override
+        public void reFresh(int position) {
+            costFragment = new CostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("travel", travel);
+            bundle.putInt("dayposition", dayposition);
+            bundle.putInt("planposition",position);
+            costFragment.setArguments(bundle);
+            replaceFragment();
+        }
+    };
 
 }
