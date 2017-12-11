@@ -101,6 +101,7 @@ public class CheckListAdapter extends BaseAdapter {
         });
         return convertView;
     }
+
     public void changeCheck(final CheckItem checkItem,final String isChecked){
         DatabaseReference CheckListRef = travelsRef.child(travel.getTitle()).child("checkList");
         CheckListRef.addValueEventListener(new ValueEventListener() {

@@ -1,7 +1,9 @@
 package com.example.travelplanner.diaryActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +41,16 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
 
         private Context context;
         private DiaryListAdapter adapter;
+        private AlertDialog.Builder alertDialogBuilder;
 
         public ViewHolder(final Context context, View itemView, DiaryListAdapter diaryListAdapter, final Travel travel){
             super(itemView);
 
             this.context = context;
             this.adapter = diaryListAdapter;
+
+            alertDialogBuilder = new AlertDialog.Builder(context);
+            alertDialogBuilder.setTitle("Delete the Diary");
 
             diaryDateTextView = (TextView)itemView.findViewById(R.id.diaryDateTextView);
             diaryTitleTextView = (TextView)itemView.findViewById(R.id.diaryTitleTextView);
@@ -56,7 +62,7 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
                 @Override
                 public void onClick(View v) {
                     int position = getLayoutPosition();
-                    Toast.makeText(context,position+"번째 일기 클릭",Toast.LENGTH_LONG).show();
+
                     //다이어리 수정하는 기능을 하는 액티비티
                     Intent intent = new Intent(context,ModifyDiaryActivity.class);
                     intent.putExtra("diaryDate",diaryDateTextView.getText().toString());
@@ -71,12 +77,29 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
             diaryDeleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    String diaryTitle = diaryTitleTextView.getText().toString();
-                    String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Diary";
-                    DatabaseReference diaryRef = database.getReferenceFromUrl(url);
-                    diaryRef.child(diaryTitle).setValue(null);
-
+                    alertDialogBuilder
+                            .setMessage("선택한 다이어리를 삭제하시겠습니까?")
+                            .setCancelable(false)
+                            .setPositiveButton("삭제",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                            String diaryTitle = diaryTitleTextView.getText().toString();
+                                            String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Diary";
+                                            DatabaseReference diaryRef = database.getReferenceFromUrl(url);
+                                            diaryRef.child(diaryTitle).setValue(null);
+                                        }
+                                    })
+                            .setNegativeButton("취소",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            // 다이얼로그를 취소한다
+                                            dialog.cancel();
+                                        }
+                                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
             });
         }

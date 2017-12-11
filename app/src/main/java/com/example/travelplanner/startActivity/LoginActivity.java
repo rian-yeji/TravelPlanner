@@ -1,6 +1,7 @@
 package com.example.travelplanner.startActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,11 +22,18 @@ public class LoginActivity extends AppCompatActivity {
     private final static String TAG = "LoginActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private String email,password;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        editor = preferences.edit();
 
         mAuth = FirebaseAuth.getInstance();   // 인증 객체 가져오기
         mAuthListener = new FirebaseAuth.AuthStateListener() {  // 인증 상태 리스너
@@ -56,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onButtonLogin(View v) {
-        String email = ((EditText) findViewById(R.id.etEmail)).getText().toString();
-        String password = ((EditText) findViewById(R.id.etPassword)).getText().toString();
+        email = ((EditText) findViewById(R.id.etEmail)).getText().toString();
+        password = ((EditText) findViewById(R.id.etPassword)).getText().toString();
         mAuth.signInWithEmailAndPassword(email, password)  // Task 객체 리턴
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -69,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
+                            setDBKey();
                             Intent intent = new Intent(LoginActivity.this, MainHomeActivity.class);
                             startActivity(intent);
                             finish();
@@ -80,5 +89,10 @@ public class LoginActivity extends AppCompatActivity {
     public void onButtonSignUp(View v){
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
+    }
+
+    public void setDBKey(){
+        editor.putString("DBKey",email);
+        editor.commit();
     }
 }

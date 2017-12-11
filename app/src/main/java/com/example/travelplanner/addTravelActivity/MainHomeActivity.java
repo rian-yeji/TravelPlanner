@@ -1,6 +1,7 @@
 package com.example.travelplanner.addTravelActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.travelplanner.R;
 import com.google.firebase.database.DataSnapshot;
@@ -22,16 +24,18 @@ import java.util.ArrayList;
 public class MainHomeActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Travels");
+
     TravelListAdapter adapter;
     public ArrayList<Travel> travel_items = new ArrayList<Travel>();
-    String Tag = "MainHomeActivity";
     RecyclerView travelsRecyclerView;
-    ImageButton tavelAddBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_home);
+
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        String DBKey = preferences.getString("DBKey",""); //key,defaultValue
 
         travelsRecyclerView = (RecyclerView) findViewById(R.id.travelsRecyclerView);
 
@@ -40,6 +44,7 @@ public class MainHomeActivity extends AppCompatActivity {
 
         setting();//데이터베이스에서 데이터 불러와서 화면 설정(리사이클러뷰)
 
+        Toast.makeText(this,"preference값 : "+DBKey,Toast.LENGTH_SHORT).show();
 
     }
 

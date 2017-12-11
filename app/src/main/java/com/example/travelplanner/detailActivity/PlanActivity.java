@@ -162,7 +162,7 @@ public class PlanActivity extends AppCompatActivity {
 
             database = FirebaseDatabase.getInstance();
             myRef = database.getReference("Travels");
-            DatabaseReference dayRef = database.getReference("Day");
+            DatabaseReference dayRef = database.getReference("Date");
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("startDate").child("year").setValue(year);
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("startDate").child("month").setValue(monthOfYear+1);
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("startDate").child("day").setValue(dayOfMonth);
@@ -192,7 +192,7 @@ public class PlanActivity extends AppCompatActivity {
 
             database = FirebaseDatabase.getInstance();
             myRef = database.getReference("Travels");
-            DatabaseReference dayRef = database.getReference("Day");
+            DatabaseReference dayRef = database.getReference("Date");
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("year").setValue(year);
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("month").setValue(monthOfYear+1);
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("day").setValue(dayOfMonth);
