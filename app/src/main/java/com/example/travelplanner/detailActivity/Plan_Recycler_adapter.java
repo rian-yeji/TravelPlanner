@@ -103,6 +103,7 @@ public class Plan_Recycler_adapter extends RecyclerView.Adapter<Plan_Recycler_ad
             public void onClick(View view) {
                 dayposition = items.get(position).getDayposition();
                 Log.i("position123","//"+dayposition);
+                myRef = database.getReference(DBKey);
                 DatabaseReference titleRef = myRef.child(items.get(position).getTravel().getTitle());
                 //DatabaseReference titleRef = database.getReference(items.get(position).getTravel().getTitle());
 
@@ -131,6 +132,7 @@ public class Plan_Recycler_adapter extends RecyclerView.Adapter<Plan_Recycler_ad
                                     public void onClick(
                                             DialogInterface dialog, int id) {
                                         DatabaseReference titleRef = database.getReference(items.get(position).getTravel().getTitle());
+                                        myRef = database.getReference(DBKey);
                                         myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+position).setValue(null);
                                         items.remove(position);
                                         notifyItemRemoved(position);

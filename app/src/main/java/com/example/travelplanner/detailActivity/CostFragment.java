@@ -97,7 +97,7 @@ public class CostFragment extends Fragment {
 
     public void setting() {
 
-        String url = "https://travelplanner-42f43.firebaseio.com/+" + myRef+"/"+travel.getTitle()+"/Plan/Day"+dayposition+ "/plan" + planposition;
+        String url = "https://travelplanner-42f43.firebaseio.com/+" + DBKey+"/"+travel.getTitle()+"/Plan/Day"+dayposition+ "/plan" + planposition;
         final DatabaseReference planRef = database.getReferenceFromUrl(url);
 
         planRef.addValueEventListener(new ValueEventListener() {

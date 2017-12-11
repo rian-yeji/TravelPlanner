@@ -102,16 +102,17 @@ public class DetailFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     plan_item = snapshot.child("Plan").child("Day"+dayposition).getValue(DetailPlan_item.class);
 
-                    plan_item.setCost(plan_item.getCost());
-                    plan_item.setTime(plan_item.getTime());
-                    plan_item.setLocation(plan_item.getLocation());
-                    plan_item.setMemo(plan_item.getMemo());
-                    plan_item.setTravel(travel);
-                    plan_item.setDayposition(dayposition);
+                    if(plan_item!=null){
+                        plan_item.setCost(plan_item.getCost());
+                        plan_item.setTime(plan_item.getTime());
+                        plan_item.setLocation(plan_item.getLocation());
+                        plan_item.setMemo(plan_item.getMemo());
+                        plan_item.setTravel(travel);
+                        plan_item.setDayposition(dayposition);
 
-                    items.add(plan_item);
+                        items.add(plan_item);
+                    }
                 }
-
 
                 plan_Recycler_adapter = new Plan_Recycler_adapter(getContext(), items,callnack,DBKey);
                 recyclerView.setAdapter(plan_Recycler_adapter);
