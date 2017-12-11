@@ -2,7 +2,9 @@ package com.example.travelplanner.addTravelActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 
 public class AddTravelActivity extends AppCompatActivity {
+    public DatabaseReference myRef;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Travels");
+
     Button insertButton;
     String title,country,region;
     String startDates,endDates;
@@ -32,6 +35,11 @@ public class AddTravelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_travel);
+
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        String DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
 
         startDatesTextView = (TextView)findViewById(R.id.addTravelStartDateTextView);
         endDatesTextView = (TextView)findViewById(R.id.addTravelEndDateTextView);

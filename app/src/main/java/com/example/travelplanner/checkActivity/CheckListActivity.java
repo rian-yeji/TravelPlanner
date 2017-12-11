@@ -1,6 +1,7 @@
 package com.example.travelplanner.checkActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 public class CheckListActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference travelsRef = database.getReference("Travels");
+    DatabaseReference myRef;
 
     private Travel travel;
     private ListView checkListView;
@@ -31,6 +32,8 @@ public class CheckListActivity extends AppCompatActivity {
     private EditText newCheckList_editText;
     private TextView checkItemAddBtn,checkListDeleteBtn;
 
+    private String DBKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,11 @@ public class CheckListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
+
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
 
         checkListView = (ListView) findViewById(R.id.checkListView);
 
@@ -75,14 +83,15 @@ public class CheckListActivity extends AppCompatActivity {
 
     public void inputCheckItem(){ //DB에 저장
         String input = newCheckList_editText.getText().toString();
-        travelsRef.child(travel.getTitle()).child("checkList").child(input).setValue("false");
+
+        myRef.child(travel.getTitle()).child("checkList").child(input).setValue("false");
         newCheckList_editText.setText(""); //입력필드 초기화
         adapter.notifyDataSetChanged();
         Log.i("CheckList","input 성공");
     }
 
     public void deleteCheckItems(){
-        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/checkList";
+        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle()+"/checkList";
         DatabaseReference diaryRef = database.getReferenceFromUrl(url);
         for (int i=0;i<checkList.size();i++){
             if(checkList.get(i).getIsChecked().equals("true")){
@@ -93,7 +102,7 @@ public class CheckListActivity extends AppCompatActivity {
 
     public void checkListDataSetting(){
         //final Query travels = travelsRef.orderByPriority();
-        DatabaseReference ref = travelsRef.child(travel.getTitle()).child("checkList");
+        DatabaseReference ref = myRef.child(travel.getTitle()).child("checkList");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -116,6 +125,7 @@ public class CheckListActivity extends AppCompatActivity {
                 }*/
 
                 adapter = new CheckListAdapter(getApplicationContext(),newCheckList_editText,checkList,travel);
+                adapter.setMyRef(myRef);
                 checkListView.setAdapter(adapter);
 
                 adapter.notifyDataSetChanged();

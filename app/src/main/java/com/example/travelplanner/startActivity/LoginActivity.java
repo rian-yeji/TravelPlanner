@@ -92,7 +92,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void setDBKey(){
-        editor.putString("DBKey",email);
+        String array[] = email.split("@");
+        editor.putString("DBKey",array[0]);
         editor.commit();
     }
 }

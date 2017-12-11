@@ -3,6 +3,7 @@ package com.example.travelplanner.addTravelActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,14 +19,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by 이예지 on 2017-11-09.
  */
 
 public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.ViewHolder> {
 
-    private FirebaseDatabase database;
+    //private FirebaseDatabase database;
     private DatabaseReference myRef;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
@@ -106,11 +111,13 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
     private List<Travel> mTravels;
     // Store the context for easy access
     private Context mContext;
+    String DBKey;
 
     // Pass in the contact array into the constructor
-    public TravelListAdapter(Context context, List<Travel> travels) {
+    public TravelListAdapter(Context context, List<Travel> travels,String DBKey) {
         mTravels = travels;
         mContext = context;
+        this.DBKey = DBKey;
     }
 
     // Easy access to the context object in the recyclerview
@@ -152,8 +159,9 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
     }
 
     public void updateItem(int p) {
+
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Travels");
+        myRef = database.getReference(DBKey);
         Travel travel = mTravels.get(p);
         Intent intent= new Intent(mContext, PlanActivity.class);
         intent.putExtra("TravelDetail",travel);
@@ -164,7 +172,7 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
 
     public void removeItem(int p) {
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Travels");
+        myRef = database.getReference(DBKey);
         //DB에서 삭제
         if (mTravels != null) {
             Travel gettravel = mTravels.get(p);

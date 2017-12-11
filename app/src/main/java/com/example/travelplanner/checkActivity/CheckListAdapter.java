@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class CheckListAdapter extends BaseAdapter {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();;
-    DatabaseReference travelsRef = database.getReference("Travels");
+    DatabaseReference myRef;
 
     Context context;
     ArrayList<CheckItem> checkList;
@@ -103,7 +103,7 @@ public class CheckListAdapter extends BaseAdapter {
     }
 
     public void changeCheck(final CheckItem checkItem,final String isChecked){
-        DatabaseReference CheckListRef = travelsRef.child(travel.getTitle()).child("checkList");
+        DatabaseReference CheckListRef = myRef.child(travel.getTitle()).child("checkList");
         CheckListRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,7 +115,7 @@ public class CheckListAdapter extends BaseAdapter {
                         DatabaseReference checkItemRef = database.getReference(key);
                         Log.i("CheckListAdapter","changeCheck item="+checkItemRef.getKey()+" check="+isChecked);
                         //checkItemRef.setValue(isChecked);
-                        travelsRef.child(travel.getTitle()).child("checkList").child(checkItem.getCheckItem()).setValue(isChecked);
+                        myRef.child(travel.getTitle()).child("checkList").child(checkItem.getCheckItem()).setValue(isChecked);
                     }
                 }
             }
@@ -134,15 +134,17 @@ public class CheckListAdapter extends BaseAdapter {
     }
 
     public void deleteCheckList(int position) {
-        DatabaseReference ref = travelsRef.child(travel.getTitle()).child("checkList");
+        DatabaseReference ref = myRef.child(travel.getTitle()).child("checkList");
         if(checkList != null){
             CheckItem item = checkList.get(position);
             String checkItemStr = item.getCheckItem();
             ref.child(checkItemStr).setValue(null);
-
             //checkList.remove(position);
             notifyDataSetChanged();
         }
     }
 
+    public void setMyRef(DatabaseReference myRef) {
+        this.myRef = myRef;
+    }
 }

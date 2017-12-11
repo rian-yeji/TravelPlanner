@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.travelplanner.R;
 import com.example.travelplanner.addTravelActivity.Travel;
@@ -37,8 +39,8 @@ public class PlanActivity extends AppCompatActivity {
     private EditText region;
     private TextView startDate;
     private TextView endDate;
-    private EditText costs;
     private TextView dDay;
+    private TextView planUpdateTextBtn;
 
     private ImageButton DetailPlanBtn;
     private ImageButton CostBtn;
@@ -66,12 +68,17 @@ public class PlanActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(travel.getCountry() + "(으)로 여행");
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        String DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
+
 
         country = (EditText) findViewById(R.id.Travelcountry);
         region = (EditText) findViewById(R.id.Travelregion);
         startDate = (TextView) findViewById(R.id.TravelStartdate);
         endDate = (TextView) findViewById(R.id.TravelEnddate);
-        costs = (EditText) findViewById(R.id.Travelcost);
         dDay = (TextView) findViewById(R.id.Traveldday);
 
         dataSetting();
@@ -85,7 +92,7 @@ public class PlanActivity extends AppCompatActivity {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 Context context = PlanActivity.this;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateSetListener1, year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, startDateSetListener, year, month, day);
                 datePickerDialog.show();
             }
         });
@@ -98,7 +105,7 @@ public class PlanActivity extends AppCompatActivity {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 Context context = PlanActivity.this;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateSetListener2, year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, endDateSetListener, year, month, day);
                 datePickerDialog.show();
             }
         });
@@ -147,14 +154,59 @@ public class PlanActivity extends AppCompatActivity {
                 Intent intent= new Intent(mContext, DiaryActivity.class);
                 intent.putExtra("TravelDetail",travel);
                 mContext.startActivity(intent);
-
             }
         });
 
+        planUpdateTextBtn = (TextView)findViewById(R.id.planUpdateTextBtn);
+        planUpdateTextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateTravel();
+                Toast.makeText(getApplicationContext(),"Update Complete",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+
+    String endDates,startDates;
+    private DatePickerDialog.OnDateSetListener startDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            startDates = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
+            startDate.setText(startDates);
+        }
+    };
+    private DatePickerDialog.OnDateSetListener endDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            endDates = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
+            endDate.setText(endDates);
+        }
+    };
+
+    ////////////////////////////////////////////
+    ///                                      ///
+    ///(저장 버튼 누를 시에 이 함수 부르면 됨!!!)///
+    ////////////////////////////////////////////
+    private void updateTravel(){
+        //DB에 저장
+        myRef.child(travel.getTitle()).child("Country").setValue(country.getText().toString());
+        myRef.child(travel.getTitle()).child("Region").setValue(region.getText().toString());
+        myRef.child(travel.getTitle()).child("Country").setValue(country.getText().toString());
+
+        String array[] = startDate.getText().toString().split("/");
+        myRef.child(travel.getTitle()).child("Date").child("startDates").child("year").setValue(array[0]);
+        myRef.child(travel.getTitle()).child("Date").child("startDates").child("month").setValue(array[1]);
+        myRef.child(travel.getTitle()).child("Date").child("startDates").child("day").setValue(array[2]);
+
+        String array2[] = endDate.getText().toString().split("/");
+        myRef.child(travel.getTitle()).child("Date").child("endDates").child("year").setValue(array2[0]);
+        myRef.child(travel.getTitle()).child("Date").child("endDates").child("month").setValue(array2[1]);
+        myRef.child(travel.getTitle()).child("Date").child("endDates").child("day").setValue(array2[2]);
 
     }
-    private DatePickerDialog.OnDateSetListener dateSetListener1 = new DatePickerDialog.OnDateSetListener() {
+
+    /*private DatePickerDialog.OnDateSetListener dateSetListener1 = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             String editdate = year + "/" + monthOfYear+1 + "/" + dayOfMonth;
@@ -190,18 +242,18 @@ public class PlanActivity extends AppCompatActivity {
             String editdate = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
             endDate.setText(editdate);
 
-            /*database = FirebaseDatabase.getInstance();
+            *//*database = FirebaseDatabase.getInstance();
             myRef = database.getReference("Travels");
             DatabaseReference dayRef = database.getReference("Date");
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("year").setValue(year);
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("month").setValue(monthOfYear+1);
-            myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("day").setValue(dayOfMonth);*/
+            myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("day").setValue(dayOfMonth);*//*
 
             enddd  = countdday(year,monthOfYear+1,dayOfMonth);
             countDay = enddd - startdd;
             Log.i("aaaa","//"+countDay);
         }
-    };
+    };*/
 
     public int countdday(int myear, int mmonth, int mday) {
         try {
@@ -227,7 +279,9 @@ public class PlanActivity extends AppCompatActivity {
     public void dataSetting() {
         country.setText(travel.getCountry());
         region.setText(travel.getRegion());
-        costs.setText(travel.getCosts());
+        startDate.setText(travel.getStartDates());
+        endDate.setText(travel.getEndDates());
+
         startdd = travel.getdDay();
 
         if(startdd<0) {

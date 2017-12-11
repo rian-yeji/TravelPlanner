@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.travelplanner.R;
@@ -16,26 +16,31 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainHomeActivity extends AppCompatActivity {
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Travels");
-
+    public DatabaseReference myRef;
+    FirebaseDatabase database;
     TravelListAdapter adapter;
     public ArrayList<Travel> travel_items = new ArrayList<Travel>();
     RecyclerView travelsRecyclerView;
+    String DBKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_home);
 
+        //============================================================================
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
-        String DBKey = preferences.getString("DBKey",""); //key,defaultValue
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
+
+        //=============================================================================
 
         travelsRecyclerView = (RecyclerView) findViewById(R.id.travelsRecyclerView);
 
@@ -64,9 +69,9 @@ public class MainHomeActivity extends AppCompatActivity {
 
 
     public void setting() {
-        final Query travels = myRef.orderByPriority();
-
-        travels.addValueEventListener(new ValueEventListener() {
+        //final Query travels = myRef.orderByPriority();
+        //myRef = database.getReference(DBKey);
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*DB로딩*/
@@ -75,12 +80,18 @@ public class MainHomeActivity extends AppCompatActivity {
 
                     Travel newTravel = new Travel();
 
-                    String getTitle = snapshot.getRef().getKey();
-                    String country = snapshot.child("Country").getValue().toString();
-                    String region = snapshot.child("Region").getValue().toString();
-                    String startDates = snapshot.child("Date").child("startDates").getValue().toString();
-                    String endDates = snapshot.child("Date").child("endDates").getValue().toString();
-                    String cost = snapshot.child("Costs").getValue().toString();
+                    String getTitle = snapshot.getKey();
+                    Log.i("yeji",getTitle);
+                    String country = snapshot.child("Country").getValue(String.class);
+                    String region = snapshot.child("Region").getValue(String.class);
+                    String cost = snapshot.child("Costs").getValue(String.class);
+                    String startDates = snapshot.child("Date").child("startDates").child("year").getValue(String.class)+"/";
+                    startDates += snapshot.child("Date").child("startDates").child("month").getValue(String.class)+"/";
+                    startDates += snapshot.child("Date").child("startDates").child("day").getValue(String.class);
+
+                    String endDates = snapshot.child("Date").child("endDates").child("year").getValue(String.class)+"/";
+                    endDates += snapshot.child("Date").child("endDates").child("month").getValue(String.class)+"/";
+                    endDates += snapshot.child("Date").child("endDates").child("day").getValue(String.class);
 
                     newTravel.setTitle(getTitle);
                     newTravel.setCountry(country);
@@ -96,7 +107,7 @@ public class MainHomeActivity extends AppCompatActivity {
                 if (travel_items.isEmpty())//기존의 데이터가 없다면 샘플 하나 생성
                     travel_items.add(new Travel());
 
-                adapter = new TravelListAdapter(getApplicationContext(), travel_items);
+                adapter = new TravelListAdapter(getApplicationContext(), travel_items,DBKey);
                 travelsRecyclerView.setAdapter(adapter);
 
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -117,4 +128,10 @@ public class MainHomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        setting();
+    }
 }
