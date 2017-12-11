@@ -80,7 +80,6 @@ public class PlanActivity extends AppCompatActivity {
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
@@ -94,7 +93,6 @@ public class PlanActivity extends AppCompatActivity {
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
@@ -189,15 +187,15 @@ public class PlanActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener dateSetListener2 = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            String editdate = year + "/" + monthOfYear+1 + "/" + dayOfMonth;
+            String editdate = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
             endDate.setText(editdate);
 
-            database = FirebaseDatabase.getInstance();
+            /*database = FirebaseDatabase.getInstance();
             myRef = database.getReference("Travels");
             DatabaseReference dayRef = database.getReference("Date");
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("year").setValue(year);
             myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("month").setValue(monthOfYear+1);
-            myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("day").setValue(dayOfMonth);
+            myRef.child(travel.getTitle()).child(dayRef.getKey()).child("endDate").child("day").setValue(dayOfMonth);*/
 
             enddd  = countdday(year,monthOfYear+1,dayOfMonth);
             countDay = enddd - startdd;
@@ -243,7 +241,7 @@ public class PlanActivity extends AppCompatActivity {
 
         Log.i("AAa","plan//" + countDay);
 
-        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Day";
+        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Date";
         DatabaseReference daryRef = database.getReferenceFromUrl(url);
         daryRef.addValueEventListener(new ValueEventListener() {
             @Override

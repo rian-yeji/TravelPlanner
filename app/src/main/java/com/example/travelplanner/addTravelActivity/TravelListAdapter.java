@@ -140,7 +140,7 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         viewHolder.titleTextView.setText(travel.getTitle());
         viewHolder.countryTextView.setText(travel.getCountry());
         viewHolder.regionTextView.setText(travel.getRegion());
-        viewHolder.datesTextView.setText(travel.getDates());
+        viewHolder.datesTextView.setText(travel.getStartDates()+"~"+travel.getEndDates());
         viewHolder.costsTextView.setText(travel.getCosts());
 
     }

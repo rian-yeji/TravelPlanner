@@ -12,10 +12,8 @@ public class Travel implements Serializable{
     private String title;
     private String country;
     private String region;
-    private String dates;
+    private String startDates,endDates;
     private String costs;
-
-
 
     private int dDay;
 
@@ -23,15 +21,13 @@ public class Travel implements Serializable{
         title="새 여행 샘플";
         country = "일본";
         region = "도쿄";
-        dates="1/11";
         costs="100만원";
         dDay=0;
     }
 
-    public Travel(String countury,String region,String date){
+    public Travel(String countury,String region){
         this.country = countury;
         this.region = region;
-        this.dates = date;
     }
 
     public static ArrayList<Travel> createTravelsList(int num){
@@ -68,14 +64,6 @@ public class Travel implements Serializable{
         this.region = region;
     }
 
-    public String getDates() {
-        return dates;
-    }
-
-    public void setDates(String dates) {
-        this.dates = dates;
-    }
-
     public String getCosts() {
         return costs;
     }
@@ -83,12 +71,29 @@ public class Travel implements Serializable{
     public void setCosts(String cost) {
         this.costs = cost;
     }
+
     public int getdDay() {
         return dDay;
     }
 
     public void setdDay(int dDay) {
         this.dDay = dDay;
+    }
+
+    public String getStartDates() {
+        return startDates;
+    }
+
+    public void setStartDates(String startDates) {
+        this.startDates = startDates;
+    }
+
+    public String getEndDates() {
+        return endDates;
+    }
+
+    public void setEndDates(String endDates) {
+        this.endDates = endDates;
     }
 
 }

@@ -72,15 +72,22 @@ public class MainHomeActivity extends AppCompatActivity {
                 /*DB로딩*/
                 travel_items.clear();//초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Travel newTravel = snapshot.getValue(Travel.class);
+
+                    Travel newTravel = new Travel();
 
                     String getTitle = snapshot.getRef().getKey();
+                    String country = snapshot.child("Country").getValue().toString();
+                    String region = snapshot.child("Region").getValue().toString();
+                    String startDates = snapshot.child("Date").child("startDates").getValue().toString();
+                    String endDates = snapshot.child("Date").child("endDates").getValue().toString();
+                    String cost = snapshot.child("Costs").getValue().toString();
 
                     newTravel.setTitle(getTitle);
-                    newTravel.setCountry(newTravel.getCountry());
-                    newTravel.setRegion(newTravel.getRegion());
-                    newTravel.setDates(newTravel.getDates());
-                    newTravel.setCosts(newTravel.getCosts());
+                    newTravel.setCountry(country);
+                    newTravel.setRegion(region);
+                    newTravel.setStartDates(startDates);
+                    newTravel.setEndDates(endDates);
+                    newTravel.setCosts(cost);
 
                     travel_items.add(newTravel);
                 }
