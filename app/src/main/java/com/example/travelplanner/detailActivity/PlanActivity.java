@@ -282,7 +282,7 @@ public class PlanActivity extends AppCompatActivity {
         startDate.setText(travel.getStartDates());
         endDate.setText(travel.getEndDates());
 
-        startdd = travel.getdDay();
+        startdd = Integer.parseInt(travel.getdDay());
 
         if(startdd<0) {
             startdd = -startdd;

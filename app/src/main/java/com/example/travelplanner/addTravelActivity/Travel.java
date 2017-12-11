@@ -15,14 +15,15 @@ public class Travel implements Serializable{
     private String startDates,endDates;
     private String costs;
 
-    private int dDay;
+
+    private String dDay;
 
     public Travel(){
         title="새 여행 샘플";
         country = "일본";
         region = "도쿄";
         costs="100만원";
-        dDay=0;
+        dDay="0";
     }
 
     public Travel(String countury,String region){
@@ -72,13 +73,14 @@ public class Travel implements Serializable{
         this.costs = cost;
     }
 
-    public int getdDay() {
+    public String  getdDay() {
         return dDay;
     }
 
-    public void setdDay(int dDay) {
+    public void setdDay(String dDay) {
         this.dDay = dDay;
     }
+
 
     public String getStartDates() {
         return startDates;

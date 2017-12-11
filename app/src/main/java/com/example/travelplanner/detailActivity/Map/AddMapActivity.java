@@ -154,16 +154,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
         m = mMap.addMarker(new MarkerOptions().position(location).title(input));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 
-       //////빨간줄 그어주는 코드
-        /*polylineOptions = new PolylineOptions();
 
-        arrayPoints.add(location);
-
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(5);
-        arrayPoints.add(location);
-        polylineOptions.addAll(arrayPoints);
-        mMap.addPolyline(polylineOptions);*/
 
         myRef.child(travel.getTitle()).child("Plan").child("Day"+i)/*setValue(input)*/;
         i++;

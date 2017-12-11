@@ -2,7 +2,9 @@ package com.example.travelplanner.detailActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -17,6 +19,12 @@ import android.view.View;
 
 import com.example.travelplanner.R;
 import com.example.travelplanner.addTravelActivity.Travel;
+import com.example.travelplanner.detailActivity.Map.DayMapFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -26,8 +34,13 @@ public class DetailPlanActivity extends AppCompatActivity {
     private ArrayList<Detail_item> items;
     private Travel travel;
     int countDay;
-    private DetailFragment fragment;
+    private DayMapFragment dayMapFragment = new DayMapFragment();
+    private DetailFragment detailFragment;
     private AlertDialog.Builder alertDialogBuilder;
+    public DatabaseReference myRef;
+    String DBKey;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private int dayposition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +50,18 @@ public class DetailPlanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
 
+
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
+
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("날짜 선택 X");
 
-        countDay = 7;/*= intent.getIntExtra("countDay",0);*/
+        setting();
+
+
         Log.i("Ddddd", "detail//" + countDay);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(travel.getCountry() + "(으)로 여행");
@@ -57,56 +78,107 @@ public class DetailPlanActivity extends AppCompatActivity {
 
         detail_recycler_adapter.setItemClick(new Detail_Recycler_adapter.ItemClick() {
             public void onClick(View view, int position) {
-                Log.i("position", position + "//" + "Pressed");
 
-                fragment = new DetailFragment();
+                dayposition = position;
+                Log.i("position", dayposition + "//" + "Pressed");
+
+                detailFragment = new DetailFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt("dayposition", position); // Object 넘기기
+                bundle.putInt("dayposition", dayposition); // Object 넘기기
                 bundle.putSerializable("travel", travel);
-                fragment.setArguments(bundle);
+                detailFragment.setArguments(bundle);
                 Log.i("Test", "activity : " + position);
 
-                replaceFragment();
+                replaceFragment(detailFragment);
             }
         });
 
+    }
+
+    public void setting() {
+        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle();
+        DatabaseReference dateRef = database.getReferenceFromUrl(url);
+
+        dateRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                /*DB로딩*/
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String endDday = snapshot.child("endDday").getValue(String.class);
+                    String startDday = snapshot.child("startDday").getValue(String.class);
+                    Log.e("aaaaaaaaaaaaaaa",snapshot.getKey());
+                    int end = Integer.parseInt(endDday);
+                    int start = Integer.parseInt(startDday);
+                   countDay = end - start;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
-
-    /////////////////////////////////////어뎁터에 추가//////////////////////////////////////////
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (fragment != null) {
-            fragment = ((DetailFragment) getSupportFragmentManager().findFragmentByTag("fragmentTag"));
-            fragment.addItem();
-            replaceFragment();
-        } else {
-            alertDialogBuilder
-                    .setMessage("날짜를 선택하세요.")
-                    .setCancelable(false)
-                    .setPositiveButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
 
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+            if (detailFragment != null) {
+                detailFragment = ((DetailFragment) getSupportFragmentManager().findFragmentByTag("fragmentTag"));
+                detailFragment.addItem();
+                replaceFragment(detailFragment);
+            } else {
+                alert();
+            }
+        }
 
+        else if (id == R.id.action_map) {
+            if(detailFragment != null) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("dayposition", dayposition); // Object 넘기기
+                dayMapFragment.setArguments(bundle);
+                addToBackFragment(dayMapFragment);
+            } else {
+                alert();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void replaceFragment() {
+    public void alert() {
+        alertDialogBuilder
+                .setMessage("날짜를 선택하세요.")
+                .setCancelable(false)
+                .setPositiveButton("확인",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(
+                                    DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction  fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.detailFragment, fragment, "fragmentTag");
+        fragmentTransaction.commit();
+    }
+
+    public void addToBackFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction  fragmentTransaction = fragmentManager.beginTransaction().hide(detailFragment);
+        fragmentTransaction.addToBackStack("mapback");
+        fragmentTransaction.add(R.id.detailFragment, fragment, "MapfragmentTag");
         fragmentTransaction.commit();
     }
 

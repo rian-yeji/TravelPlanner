@@ -3,6 +3,7 @@ package com.example.travelplanner.addTravelActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -33,6 +34,9 @@ public class MainHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_home);
 
+        ActionBar actionBar = getSupportActionBar();
+
+
         //============================================================================
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
@@ -41,6 +45,8 @@ public class MainHomeActivity extends AppCompatActivity {
         myRef = database.getReference(DBKey);
 
         //=============================================================================
+
+        actionBar.setTitle(DBKey + "님의 여행기록");
 
         travelsRecyclerView = (RecyclerView) findViewById(R.id.travelsRecyclerView);
 
@@ -55,15 +61,21 @@ public class MainHomeActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem item2 = menu.findItem(R.id.action_map);
+        item2.setVisible(false);
         return true;
     }
-
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intent = new Intent(MainHomeActivity.this, AddTravelActivity.class);
-        startActivity(intent);
 
-        return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+
+            Intent intent = new Intent(MainHomeActivity.this, AddTravelActivity.class);
+            startActivity(intent);
+        }
+            return super.onOptionsItemSelected(item);
+
     }
 
 
@@ -93,12 +105,15 @@ public class MainHomeActivity extends AppCompatActivity {
                     endDates += snapshot.child("Date").child("endDates").child("month").getValue(String.class)+"/";
                     endDates += snapshot.child("Date").child("endDates").child("day").getValue(String.class);
 
+                    String dDay = snapshot.child("Date").child("startDday").getValue(String.class);
+
                     newTravel.setTitle(getTitle);
                     newTravel.setCountry(country);
                     newTravel.setRegion(region);
                     newTravel.setStartDates(startDates);
                     newTravel.setEndDates(endDates);
                     newTravel.setCosts(cost);
+                    newTravel.setdDay(dDay);
 
                     travel_items.add(newTravel);
                 }
