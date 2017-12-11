@@ -28,11 +28,13 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
     private Context context;
     private List<Diary> diaryList;
     private Travel travel;
+    private String DBKey;
 
-    public DiaryListAdapter(Context context,List<Diary> diaryList,Travel travel){
+    public DiaryListAdapter(Context context,List<Diary> diaryList,Travel travel,String DBKey){
         this.context = context;
         this.diaryList = diaryList;
         this.travel = travel;
+        this.DBKey = DBKey;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -43,7 +45,7 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
         private DiaryListAdapter adapter;
         private AlertDialog.Builder alertDialogBuilder;
 
-        public ViewHolder(final Context context, View itemView, DiaryListAdapter diaryListAdapter, final Travel travel){
+        public ViewHolder(final Context context, View itemView, DiaryListAdapter diaryListAdapter, final Travel travel,final String DBKey){
             super(itemView);
 
             this.context = context;
@@ -85,7 +87,7 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
                                         public void onClick(DialogInterface dialog, int id) {
                                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                                             String diaryTitle = diaryTitleTextView.getText().toString();
-                                            String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Diary";
+                                            String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle()+"/Diary";
                                             DatabaseReference diaryRef = database.getReferenceFromUrl(url);
                                             diaryRef.child(diaryTitle).setValue(null);
                                         }
@@ -117,7 +119,7 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View contactView = inflater.inflate(R.layout.item_diary,parent,false);
-        ViewHolder viewHolder = new ViewHolder(context,contactView,this,travel);
+        ViewHolder viewHolder = new ViewHolder(context,contactView,this,travel,this.DBKey);
         return viewHolder;
     }
 

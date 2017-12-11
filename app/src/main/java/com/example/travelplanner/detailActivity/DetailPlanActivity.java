@@ -59,10 +59,7 @@ public class DetailPlanActivity extends AppCompatActivity {
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("날짜 선택 X");
 
-        setting();
 
-
-        Log.i("Ddddd", "detail//" + countDay);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(travel.getCountry() + "(으)로 여행");
 
@@ -72,9 +69,8 @@ public class DetailPlanActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(detail_recycler_adapter);
 
+        setting();
 
-        for (int i = 0; i < countDay; i++)
-            items.add(new Detail_item(1 + i + ",", "일"));
 
         detail_recycler_adapter.setItemClick(new Detail_Recycler_adapter.ItemClick() {
             public void onClick(View view, int position) {
@@ -94,9 +90,11 @@ public class DetailPlanActivity extends AppCompatActivity {
         });
 
     }
+    String startDday,endDday;
+    int start,end;
 
     public void setting() {
-        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle();
+        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle()+"/Date";
         DatabaseReference dateRef = database.getReferenceFromUrl(url);
 
         dateRef.addValueEventListener(new ValueEventListener() {
@@ -104,13 +102,22 @@ public class DetailPlanActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*DB로딩*/
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String endDday = snapshot.child("endDday").getValue(String.class);
-                    String startDday = snapshot.child("startDday").getValue(String.class);
-                    Log.e("aaaaaaaaaaaaaaa",snapshot.getKey());
-                    int end = Integer.parseInt(endDday);
-                    int start = Integer.parseInt(startDday);
-                   countDay = end - start;
+                    /*String startDday,endDday;
+                    int start,end,countDay;*/
+                    if(snapshot.getKey().equals("endDday")){
+                        endDday = snapshot.getValue(String.class);
+                        end = Integer.parseInt(endDday);
+                    }
+                    else if(snapshot.getKey().equals("startDday")){
+                        startDday = snapshot.getValue(String.class);
+                        start = Integer.parseInt(startDday);
+                    }
                 }
+                countDay = end-start;
+                Log.e("aaaa","count"+countDay);
+                for (int i = 0; i < countDay; i++)
+                    items.add(new Detail_item(1 + i + ",", "일"));
+
             }
 
             @Override

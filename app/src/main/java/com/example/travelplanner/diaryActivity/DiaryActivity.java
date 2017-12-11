@@ -1,6 +1,7 @@
 package com.example.travelplanner.diaryActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,8 @@ import java.util.ArrayList;
 public class DiaryActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference travelsRef = database.getReference("Travles");
+    DatabaseReference myRef;
+    String DBKey;
 
     DiaryListAdapter adapter;
     ArrayList<Diary> diaryList = new ArrayList<Diary>();
@@ -39,6 +41,12 @@ public class DiaryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
 
         diaryRecyclerView = (RecyclerView)findViewById(R.id.diaryRecyclerView);
 
@@ -60,7 +68,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     public void setting(){
         //파이어베이스에서 데이터 얻어오기
-        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Diary";
+        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle()+"/Diary";
         DatabaseReference diaryRef = database.getReferenceFromUrl(url);
 
         //database.getReference("Travles").child("Travel2").child("Diary").child("하하").child("date").setValue("null");
@@ -93,7 +101,7 @@ public class DiaryActivity extends AppCompatActivity {
                     diaryList.add(new Diary("yyyy/MM/dd","Sample","새 일기를 작성 해 보세요."));
                 }*/
 
-                adapter = new DiaryListAdapter(getApplicationContext(),diaryList,travel);
+                adapter = new DiaryListAdapter(getApplicationContext(),diaryList,travel,DBKey);
                 diaryRecyclerView.setAdapter(adapter);
 
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);

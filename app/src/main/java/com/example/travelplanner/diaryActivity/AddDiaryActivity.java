@@ -1,6 +1,7 @@
 package com.example.travelplanner.diaryActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,7 +21,7 @@ import java.util.Date;
 
 public class AddDiaryActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference travelsRef = database.getReference("Travels");
+    DatabaseReference myRef;
 
     private final int contentsEditLimit = 150;
 
@@ -36,6 +37,11 @@ public class AddDiaryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
+
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        String DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
 
         diaryDateTextView = (TextView)findViewById(R.id.addDiaryDateTextView);
         diaryDateTextView.setText(getCurrentDate()); //현재날짜로 셋팅
@@ -85,8 +91,8 @@ public class AddDiaryActivity extends AppCompatActivity {
         String title = diaryTitleEditText.getText().toString();
         String contents = diaryContentsEditText.getText().toString();
 
-        travelsRef.child(travel.getTitle()).child("Diary").child(title).child("date").setValue(date);
-        travelsRef.child(travel.getTitle()).child("Diary").child(title).child("contents").setValue(contents);
+        myRef.child(travel.getTitle()).child("Diary").child(title).child("date").setValue(date);
+        myRef.child(travel.getTitle()).child("Diary").child(title).child("contents").setValue(contents);
 
         Toast.makeText(getApplicationContext(),"Diary Save Complete",Toast.LENGTH_LONG).show();
         finish();

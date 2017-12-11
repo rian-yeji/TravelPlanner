@@ -109,18 +109,18 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
         arrayPoints = new ArrayList<LatLng>();
 
         LatLng place = new LatLng(38, 127);
-       // settingMap();
+        // settingMap();
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
     }
 
-    public void settingMap(){ //db 불러오기
+    public void settingMap(){ //db 遺덈윭?ㅺ린
         final Query plans = myRef.orderByPriority();
 
         plans.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                /*DB로딩*/
+                /*DB濡쒕뵫*/
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     String plan = snapshot.getValue(String.class);
                     Log.i("hahaneul", plan);
@@ -144,7 +144,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     private int i=0;
 
     protected void updateMap() {
-        textView.setText("위도 : " + bestResult.getLatitude() + "경도 : " + bestResult.getLongitude());
+        textView.setText("?꾨룄 : " + bestResult.getLatitude() + "寃쎈룄 : " + bestResult.getLongitude());
         location = new LatLng(bestResult.getLatitude(), bestResult.getLongitude());
 
         if(m != null) {
@@ -167,7 +167,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     private void addMap(Map_item map_item) {
 
         DatabaseReference titleRef = database.getReference(travel.getTitle());
-        //날짜 추가 수정 필요
+        //?좎쭨 異붽? ?섏젙 ?꾩슂
         myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("Map").setValue(map_item);
 
 
@@ -213,7 +213,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     public void searchAddress(Context mcontext, String input) {
         try {
             Geocoder geocoder = new Geocoder(this, Locale.KOREA);
-            List<Address> addresses = geocoder.getFromLocationName(input,1); //input 입력받은 주소
+            List<Address> addresses = geocoder.getFromLocationName(input,1); //input ?낅젰諛쏆? 二쇱냼
             if (addresses.size() >0) {
                 bestResult = (Address) addresses.get(0);
                 //LatLng serarch = new LatLng(bestResult.getLatitude(), bestResult.getLongitude());

@@ -1,6 +1,7 @@
 package com.example.travelplanner.diaryActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ModifyDiaryActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference travelsRef = database.getReference("Travels");
+    DatabaseReference myRef;
 
     private final int contentsEditLimit = 150;
     private TextView diaryDateTextView,diaryCancelTextView,diarySaveTextView,diaryTextNumTextView;
@@ -26,6 +27,7 @@ public class ModifyDiaryActivity extends AppCompatActivity {
     private Travel travel; //파이어베이스에 저장할 때 씀(이건 어뎁터에서 실행시킨거라 이거 다르게 받아와야함)
     private String diaryTitle,diaryDate,diaryContents;
     private String deleteDiaryTitle;
+    private String DBKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,11 @@ public class ModifyDiaryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
+
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        String DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
 
         diaryDate = intent.getStringExtra("diaryDate");
         diaryTitle = intent.getStringExtra("diaryTitle");
@@ -97,8 +104,8 @@ public class ModifyDiaryActivity extends AppCompatActivity {
         String title = diaryTitleEditText.getText().toString();
         String contents = diaryContentsEditText.getText().toString();
 
-        travelsRef.child(travelTitle).child("Diary").child(title).child("date").setValue(date);
-        travelsRef.child(travelTitle).child("Diary").child(title).child("contents").setValue(contents);
+        myRef.child(travelTitle).child("Diary").child(title).child("date").setValue(date);
+        myRef.child(travelTitle).child("Diary").child(title).child("contents").setValue(contents);
 
         Toast.makeText(getApplicationContext(),"Diary Modify Complete",Toast.LENGTH_LONG).show();
         finish();
@@ -107,7 +114,7 @@ public class ModifyDiaryActivity extends AppCompatActivity {
     }
 
     public void diaryDelete(String travelTitle){
-        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travelTitle+"/Diary";
+        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travelTitle+"/Diary";
         DatabaseReference diaryRef = database.getReferenceFromUrl(url);
         diaryRef.child(deleteDiaryTitle).setValue(null);
     }
