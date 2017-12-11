@@ -1,6 +1,7 @@
 package com.example.travelplanner.detailActivity;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -42,6 +45,7 @@ public class DetailFragment extends Fragment {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("Travels");
     FragmentManager fragmentManager;
+    String DBKey;
 
     public DetailFragment() {}
 
@@ -49,6 +53,11 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        SharedPreferences preferences = getActivity().getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+        myRef = database.getReference(DBKey);
 
         Bundle bundle = getArguments();
         dayposition = bundle.getInt("dayposition");
@@ -58,7 +67,7 @@ public class DetailFragment extends Fragment {
         // mapBtn = (Button)view.findViewById(R.id.mapActivityBtn);
 
         items = new ArrayList<DetailPlan_item>();
-        plan_Recycler_adapter = new Plan_Recycler_adapter(view.getContext(),items, callnack);
+        plan_Recycler_adapter = new Plan_Recycler_adapter(view.getContext(),items, callnack,DBKey);
         recyclerView = (RecyclerView)view.findViewById(R.id.PlanRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(plan_Recycler_adapter);
@@ -82,16 +91,16 @@ public class DetailFragment extends Fragment {
     }
 
     public void setting() {
-        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Plan/Day"+dayposition;
+        /*String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Plan/Day"+dayposition;
         final DatabaseReference planRef = database.getReferenceFromUrl(url);
-
-        planRef.addValueEventListener(new ValueEventListener() {
+*/
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*DB로딩*/
                 items.clear();//초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    plan_item = snapshot.getValue(DetailPlan_item.class);
+                    plan_item = snapshot.child("Plan").child("Day"+dayposition).getValue(DetailPlan_item.class);
 
                     plan_item.setCost(plan_item.getCost());
                     plan_item.setTime(plan_item.getTime());
@@ -104,7 +113,7 @@ public class DetailFragment extends Fragment {
                 }
 
 
-                plan_Recycler_adapter = new Plan_Recycler_adapter(getContext(), items,callnack);
+                plan_Recycler_adapter = new Plan_Recycler_adapter(getContext(), items,callnack,DBKey);
                 recyclerView.setAdapter(plan_Recycler_adapter);
 
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);

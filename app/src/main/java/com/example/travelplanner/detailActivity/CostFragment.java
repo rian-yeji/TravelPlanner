@@ -1,6 +1,7 @@
 package com.example.travelplanner.detailActivity;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -30,7 +33,8 @@ public class CostFragment extends Fragment {
     private EditText costDetailEdit;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = database.getReference("Travels");
+    private DatabaseReference myRef;
+    String DBKey;
 
     private Travel travel;
     private int dayposition;
@@ -41,6 +45,8 @@ public class CostFragment extends Fragment {
     private String costDetail;
     private Spinner spinner;
 
+
+
     public CostFragment() {
         // Required empty public constructor
     }
@@ -49,6 +55,10 @@ public class CostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_cost, container, false);
+
+        SharedPreferences preferences = getActivity().getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+        myRef = database.getReference(DBKey);
 
         saveBtn = (Button)view.findViewById(R.id.costSaveBtn);
         costEdit = (EditText)view.findViewById(R.id.costEdit);
@@ -65,12 +75,12 @@ public class CostFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                // detailFragment.setCostText(cost);
-                DatabaseReference titleRef = database.getReference(travel.getTitle());
+              //  DatabaseReference titleRef = database.getReference(travel.getTitle());
                 //날짜 추가 수정 필요
                 Log.e("dadf",spinner.getSelectedItem().toString());
-                myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("costValue").setValue(spinner.getSelectedItem().toString());
-                myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("cost").setValue(costEdit.getText().toString());
-                myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("costDetail").setValue(costDetailEdit.getText().toString());
+                myRef.child(travel.getTitle()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("costValue").setValue(spinner.getSelectedItem().toString());
+                myRef.child(travel.getTitle()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("cost").setValue(costEdit.getText().toString());
+                myRef.child(travel.getTitle()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("costDetail").setValue(costDetailEdit.getText().toString());
                 replace();
             }
 
@@ -87,7 +97,7 @@ public class CostFragment extends Fragment {
 
     public void setting() {
 
-        String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Plan/Day"+dayposition+ "/plan" + planposition;
+        String url = "https://travelplanner-42f43.firebaseio.com/+" + myRef+"/"+travel.getTitle()+"/Plan/Day"+dayposition+ "/plan" + planposition;
         final DatabaseReference planRef = database.getReferenceFromUrl(url);
 
         planRef.addValueEventListener(new ValueEventListener() {

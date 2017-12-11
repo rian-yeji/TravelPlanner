@@ -34,8 +34,9 @@ public class Plan_Recycler_adapter extends RecyclerView.Adapter<Plan_Recycler_ad
     private ArrayList<DetailPlan_item> items;
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = database.getReference("Travels");
-    //  private DetailFragment detailFragment;
+    private DatabaseReference myRef;
+    String DBKey;
+
     private AlertDialog.Builder alertDialogBuilder;
     private  int dayposition;
     //아이템 클릭시 실행 함수
@@ -43,10 +44,11 @@ public class Plan_Recycler_adapter extends RecyclerView.Adapter<Plan_Recycler_ad
     private FragmentActivity activity;
     private Callnack callnack;
 
-    public Plan_Recycler_adapter(Context context, ArrayList<DetailPlan_item> items, Callnack callnack) {
+    public Plan_Recycler_adapter(Context context, ArrayList<DetailPlan_item> items, Callnack callnack,String DBKey) {
         this.context = context;
         this.items = items;
         this.callnack = callnack;
+        this.DBKey = DBKey;
     }
 
 
@@ -101,7 +103,8 @@ public class Plan_Recycler_adapter extends RecyclerView.Adapter<Plan_Recycler_ad
             public void onClick(View view) {
                 dayposition = items.get(position).getDayposition();
                 Log.i("position123","//"+dayposition);
-                DatabaseReference titleRef = database.getReference(items.get(position).getTravel().getTitle());
+                DatabaseReference titleRef = myRef.child(items.get(position).getTravel().getTitle());
+                //DatabaseReference titleRef = database.getReference(items.get(position).getTravel().getTitle());
 
                 notifyDataSetChanged();
                 //날짜 추가 수정 필요
