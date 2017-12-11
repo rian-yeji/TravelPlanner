@@ -26,7 +26,6 @@ public class AddTravelActivity extends AppCompatActivity {
     String title,country,region;
     String startDates,endDates;
     TextView startDatesTextView,endDatesTextView;
-    String key;
     String Tag = "AddTravelActivity";
 
     @Override
@@ -91,15 +90,25 @@ public class AddTravelActivity extends AppCompatActivity {
 
         myRef.child(titleRef.getKey()).child("Region").setValue(region);
         myRef.child(titleRef.getKey()).child("Country").setValue(country);
-        myRef.child(titleRef.getKey()).child("Date").child("startDates").setValue(startDates);
-        myRef.child(titleRef.getKey()).child("Date").child("endDates").setValue(endDates);
         myRef.child(titleRef.getKey()).child("Costs").setValue("0"); //초기값
+
+        String array[] = startDates.split("/");
+        myRef.child(titleRef.getKey()).child("Date").child("startDates").child("year").setValue(array[0]);
+        myRef.child(titleRef.getKey()).child("Date").child("startDates").child("month").setValue(array[1]);
+        myRef.child(titleRef.getKey()).child("Date").child("startDates").child("day").setValue(array[2]);
+
+
+        String array2[] = endDates.split("/");
+        myRef.child(titleRef.getKey()).child("Date").child("endDates").child("year").setValue(array2[0]);
+        myRef.child(titleRef.getKey()).child("Date").child("endDates").child("month").setValue(array2[1]);
+        myRef.child(titleRef.getKey()).child("Date").child("endDates").child("day").setValue(array2[2]);
+
     }
 
     private DatePickerDialog.OnDateSetListener startDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            startDates = year + "/" + monthOfYear+1 + "/" + dayOfMonth;
+            startDates = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
             startDatesTextView.setText(startDates);
         }
     };
@@ -107,7 +116,7 @@ public class AddTravelActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener endDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            endDates = year + "/" + monthOfYear+1 + "/" + dayOfMonth;
+            endDates = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
             endDatesTextView.setText(endDates);
         }
     };
