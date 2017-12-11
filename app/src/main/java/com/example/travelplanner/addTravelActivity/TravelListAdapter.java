@@ -146,8 +146,16 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         viewHolder.regionTextView.setText(travel.getRegion());
         viewHolder.datesTextView.setText(travel.getStartDates()+"~"+travel.getEndDates());
         viewHolder.costsTextView.setText(travel.getCosts());
-        viewHolder.DdayTextView.setText(travel.getdDay());
-
+        int startdd = Integer.parseInt(travel.getdDay());
+        if(startdd<0) {
+            startdd = -startdd;
+            viewHolder.DdayTextView.setText("D+" + startdd);
+        }
+        else if(startdd>0)
+            viewHolder.DdayTextView.setText("D-"+startdd);
+        else
+            viewHolder.DdayTextView.setText("D-DAY!!");
+        //viewHolder.DdayTextView.setText(travel.getdDay());
     }
 
     // Returns the total count of items in the list

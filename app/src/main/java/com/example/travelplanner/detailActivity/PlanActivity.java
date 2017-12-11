@@ -42,10 +42,10 @@ public class PlanActivity extends AppCompatActivity {
     private TextView dDay;
     private TextView planUpdateTextBtn;
 
-    private ImageButton DetailPlanBtn;
-    private ImageButton CostBtn;
-    private ImageButton checkListBtn;
-    private ImageButton diaryBtn;
+    private TextView DetailPlanBtn;
+    private TextView CostBtn;
+    private TextView checkListBtn;
+    private TextView diaryBtn;
 
     private int countDay=0;
     private int startdd;
@@ -110,8 +110,8 @@ public class PlanActivity extends AppCompatActivity {
             }
         });
 
-        DetailPlanBtn = (ImageButton) findViewById(R.id.DetailBtn);
-        CostBtn = (ImageButton)findViewById(R.id.CostBtn);
+        DetailPlanBtn = (TextView) findViewById(R.id.DetailBtn);
+        CostBtn = (TextView)findViewById(R.id.CostBtn);
 
         DetailPlanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +133,8 @@ public class PlanActivity extends AppCompatActivity {
             }
         });
 
-        checkListBtn = (ImageButton) findViewById(R.id.checkListBtn);
-        diaryBtn = (ImageButton) findViewById(R.id.diaryBtn);
+        checkListBtn = (TextView) findViewById(R.id.checkListBtn);
+        diaryBtn = (TextView) findViewById(R.id.diaryBtn);
 
         checkListBtn.setOnClickListener(new View.OnClickListener() {
             @Override

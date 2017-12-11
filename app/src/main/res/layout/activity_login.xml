@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +29,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,27 +50,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@+id/buttonSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:layout_weight="1"
+            android:background="@drawable/text_button_blue"
+            android:gravity="center"
             android:onClick="onButtonSignUp"
-            android:text="Sign Up" />
+            android:padding="5dp"
+            android:text="Sing Up"
+            android:textSize="20sp" />
 
-        <Button
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
             android:id="@+id/buttonLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:layout_margin="20dp"
             android:layout_weight="1"
+            android:background="@drawable/text_button_blue"
+            android:gravity="center"
             android:onClick="onButtonLogin"
-            android:text="Login" />
+            android:padding="5dp"
+            android:text="Login"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
 </LinearLayout>

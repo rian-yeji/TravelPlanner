@@ -149,33 +149,49 @@
         android:layout_height="match_parent"
         android:layout_weight="5">
 
-        <ImageButton
+        <TextView
             android:id="@+id/DetailBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@color/colorPrimaryDark" />
+            android:background="@drawable/text_button_outline_rectangle_pink"
+            android:gravity="center"
+            android:text="   Plan  "
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="16sp" />
 
-        <ImageButton
+        <TextView
             android:id="@+id/CostBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@color/colorPrimaryDark" />
+            android:background="@drawable/text_button_outline_rectangle_pink"
+            android:gravity="center"
+            android:text="  Cost   "
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="16sp" />
 
-        <ImageButton
+        <TextView
             android:id="@+id/checkListBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@color/colorPrimaryDark" />
+            android:background="@drawable/text_button_outline_rectangle_pink"
+            android:gravity="center"
+            android:text="CheckList"
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="16sp" />
 
-        <ImageButton
+        <TextView
             android:id="@+id/diaryBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@color/colorPrimaryDark" />
+            android:background="@drawable/text_button_outline_rectangle_pink"
+            android:gravity="center"
+            android:text="  Diary   "
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>
