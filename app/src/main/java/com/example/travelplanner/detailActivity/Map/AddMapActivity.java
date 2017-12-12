@@ -2,6 +2,7 @@ package com.example.travelplanner.detailActivity.Map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -58,7 +59,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Travels");
+    DatabaseReference myRef;
     private Travel travel;
     private int dayposition;
     private int planposition;
@@ -67,6 +68,8 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     private Marker m;
 
     private LatLng location;
+
+    String DBKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,13 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
         travel = (Travel) intent.getSerializableExtra("TravelDetail");
         dayposition = intent.getIntExtra("dayposition",0);
         planposition = intent.getIntExtra("planposition",0);
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        SharedPreferences preferences = getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+
+        myRef = database.getReference(DBKey);
 
 
 
@@ -120,7 +130,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
         plans.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                /*DB濡쒕뵫*/
+
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     String plan = snapshot.getValue(String.class);
                     Log.i("hahaneul", plan);
@@ -144,20 +154,14 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     private int i=0;
 
     protected void updateMap() {
-        textView.setText("?꾨룄 : " + bestResult.getLatitude() + "寃쎈룄 : " + bestResult.getLongitude());
+        textView.setText("위도 " + bestResult.getLatitude() + "경도 : " + bestResult.getLongitude());
         location = new LatLng(bestResult.getLatitude(), bestResult.getLongitude());
 
         if(m != null) {
-            m.remove();
+            m.remove(); //플랜 하나당 하나의 위치만 저장 가능 이전 마커 지움
         }
-        ////////////////////////////////////////////////////
         m = mMap.addMarker(new MarkerOptions().position(location).title(input));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-
-
-
-        myRef.child(travel.getTitle()).child("Plan").child("Day"+i)/*setValue(input)*/;
-        i++;
 
         map_item.setLatitude(bestResult.getLatitude());
         map_item.setLongitude(bestResult.getLongitude());
@@ -167,7 +171,7 @@ public class AddMapActivity extends AppCompatActivity implements OnMapReadyCallb
     private void addMap(Map_item map_item) {
 
         DatabaseReference titleRef = database.getReference(travel.getTitle());
-        //?좎쭨 異붽? ?섏젙 ?꾩슂
+
         myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+planposition).child("Map").setValue(map_item);
 
 

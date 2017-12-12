@@ -102,11 +102,9 @@ public class Plan_Recycler_adapter extends RecyclerView.Adapter<Plan_Recycler_ad
         holder.planSaveBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 dayposition = items.get(position).getDayposition();
-                Log.i("position123","//"+dayposition);
+                Log.i("position123","//"+position);
                 myRef = database.getReference(DBKey);
                 DatabaseReference titleRef = myRef.child(items.get(position).getTravel().getTitle());
-                //DatabaseReference titleRef = database.getReference(items.get(position).getTravel().getTitle());
-
                 notifyDataSetChanged();
                 //날짜 추가 수정 필요
                 myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+position).child("time").setValue(holder.time.getText().toString());

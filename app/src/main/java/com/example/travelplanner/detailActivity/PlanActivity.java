@@ -130,6 +130,9 @@ public class PlanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent= new Intent(mContext, TotalCostActivity.class);
+                intent.putExtra("TravelDetail",travel);
+                mContext.startActivity(intent);
             }
         });
 

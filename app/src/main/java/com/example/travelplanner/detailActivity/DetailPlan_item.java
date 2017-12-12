@@ -25,19 +25,21 @@ public class DetailPlan_item {
     int dayposition;
     String cost;
     LinearLayout costLinear;
+    String costValue;
 
     public DetailPlan_item() {
 
     }
 
-    public DetailPlan_item(String location, String memo, String time, Button mapBtn, Travel travel,int dayposition/*, int cost, LinearLayout costLinear*/) {
+    public DetailPlan_item(String location, String memo, String time, String cost,Button mapBtn, Travel travel,int dayposition/*, int cost, LinearLayout costLinear*/) {
         this.location = location;
         this.memo = memo;
         this.time = time;
         this.mapBtn = mapBtn;
         this.travel = travel;
         this.dayposition = dayposition;
-        //  this.cost = cost;
+        this.cost = cost;
+        costValue="기타";
         //  this.costLinear = costLinear;
     }
 

@@ -43,7 +43,7 @@ public class DetailFragment extends Fragment {
     private DetailPlan_item plan_item;
     String cost;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = database.getReference("Travels");
+    private DatabaseReference myRef;
     FragmentManager fragmentManager;
     String DBKey;
 
@@ -54,7 +54,6 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         SharedPreferences preferences = getActivity().getSharedPreferences("prefDB",MODE_PRIVATE);
         DBKey = preferences.getString("DBKey",""); //key,defaultValue
         myRef = database.getReference(DBKey);
@@ -85,33 +84,31 @@ public class DetailFragment extends Fragment {
     }
 
     public void addItem() {
-        items.add(new DetailPlan_item("","","",mapBtn,travel,dayposition));
+        items.add(new DetailPlan_item("장소","메모","00:00","10",mapBtn,travel,dayposition));
         plan_Recycler_adapter.notifyDataSetChanged();
         Log.i("ADD","item ADD");
     }
 
     public void setting() {
-        /*String url = "https://travelplanner-42f43.firebaseio.com/Travels/"+travel.getTitle()+"/Plan/Day"+dayposition;
+        String url = "https://travelplanner-42f43.firebaseio.com/"+DBKey+"/"+travel.getTitle()+"/Plan/Day"+dayposition;
         final DatabaseReference planRef = database.getReferenceFromUrl(url);
-*/
-        myRef.addValueEventListener(new ValueEventListener() {
+        planRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*DB로딩*/
                 items.clear();//초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    plan_item = snapshot.child("Plan").child("Day"+dayposition).getValue(DetailPlan_item.class);
+                   DetailPlan_item new_plan_item = new DetailPlan_item();
+                   // plan_item = snapshot.getValue(DetailPlan_item.class);
+                    Log.i("aaaaaaa",snapshot.getKey());
+                        new_plan_item.setCost(snapshot.child("cost").getValue(String.class));
+                        new_plan_item.setTime(snapshot.child("time").getValue(String.class));
+                        new_plan_item.setLocation(snapshot.child("location").getValue(String.class));
+                        new_plan_item.setMemo(snapshot.child("memo").getValue(String.class));
+                        new_plan_item.setTravel(travel);
+                        new_plan_item.setDayposition(dayposition);
 
-                    if(plan_item!=null){
-                        plan_item.setCost(plan_item.getCost());
-                        plan_item.setTime(plan_item.getTime());
-                        plan_item.setLocation(plan_item.getLocation());
-                        plan_item.setMemo(plan_item.getMemo());
-                        plan_item.setTravel(travel);
-                        plan_item.setDayposition(dayposition);
-
-                        items.add(plan_item);
-                    }
+                        items.add(new_plan_item);
                 }
 
                 plan_Recycler_adapter = new Plan_Recycler_adapter(getContext(), items,callnack,DBKey);

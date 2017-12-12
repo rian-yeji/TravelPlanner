@@ -116,7 +116,7 @@ public class DetailPlanActivity extends AppCompatActivity {
                 countDay = end-start;
                 Log.e("aaaa","count"+countDay);
                 for (int i = 0; i < countDay; i++)
-                    items.add(new Detail_item(1 + i + ",", "일"));
+                    items.add(new Detail_item("DAY", i+1+""));
 
             }
 

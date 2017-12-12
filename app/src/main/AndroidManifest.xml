@@ -41,7 +41,8 @@
         <activity android:name=".diaryActivity.DiaryActivity" />
         <activity android:name=".diaryActivity.AddDiaryActivity" />
         <activity android:name=".diaryActivity.ModifyDiaryActivity" />
-        <activity android:name=".detailActivity.DetailPlanActivity"></activity>
+        <activity android:name=".detailActivity.DetailPlanActivity" />
+        <activity android:name=".detailActivity.TotalCostActivity"></activity>
     </application>
 
 </manifest>
