@@ -123,7 +123,6 @@ public class CostFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String key = snapshot.getKey();
 
-
                     if (key.equals("plan" + planposition)) {
                         cost = snapshot.child("cost").getValue(String.class);
                         if (cost == null)

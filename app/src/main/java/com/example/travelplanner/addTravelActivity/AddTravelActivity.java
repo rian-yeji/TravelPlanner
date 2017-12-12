@@ -4,9 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelplanner.R;
-import com.example.travelplanner.detailActivity.PlanActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -121,6 +118,8 @@ public class AddTravelActivity extends AppCompatActivity {
         endDday = countdday(Integer.parseInt(array2[0]),Integer.parseInt(array2[1]),Integer.parseInt(array2[2]));
 
         myRef.child(titleRef.getKey()).child("Date").child("endDday").setValue(endDday+"");
+
+
 
     }
 

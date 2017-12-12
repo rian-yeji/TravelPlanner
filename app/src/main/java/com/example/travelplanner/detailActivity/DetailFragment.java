@@ -84,7 +84,7 @@ public class DetailFragment extends Fragment {
     }
 
     public void addItem() {
-        items.add(new DetailPlan_item("장소","메모","00:00","10",mapBtn,travel,dayposition));
+        items.add(new DetailPlan_item("장소","메모","00:00","10","etc","where",mapBtn,travel,dayposition));
         plan_Recycler_adapter.notifyDataSetChanged();
         Log.i("ADD","item ADD");
     }

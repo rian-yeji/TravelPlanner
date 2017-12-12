@@ -5,6 +5,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.example.travelplanner.addTravelActivity.Travel;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by hscom-009 on 2017-12-05.
@@ -27,19 +29,47 @@ public class DetailPlan_item {
     LinearLayout costLinear;
     String costValue;
 
-    public DetailPlan_item() {
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef;
+    String DBKey;
 
+    public String getCostValue() {
+        return costValue;
     }
 
-    public DetailPlan_item(String location, String memo, String time, String cost,Button mapBtn, Travel travel,int dayposition/*, int cost, LinearLayout costLinear*/) {
+    public void setCostValue(String costValue) {
+        this.costValue = costValue;
+    }
+
+    public String getCostDetail() {
+        return costDetail;
+    }
+
+    public void setCostDetail(String costDetail) {
+        this.costDetail = costDetail;
+    }
+
+    String costDetail;
+
+    public DetailPlan_item() {
+    }
+
+    public DetailPlan_item(String location, String memo, String time, String cost,String costValue ,String costDetail, Button mapBtn, Travel travel,int dayposition/*, int cost, LinearLayout costLinear*/) {
         this.location = location;
         this.memo = memo;
         this.time = time;
         this.mapBtn = mapBtn;
         this.travel = travel;
-        this.dayposition = dayposition;
+        this.dayposition  = dayposition;
         this.cost = cost;
-        costValue="기타";
+        this.costValue= costValue;
+
+        //날짜 추가 수정 필요
+       /* myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+position).child("costDetail").setValue("detail");
+        myRef.child(titleRef.getKey()).child("Plan").child("Day"+dayposition).child("plan"+position).child("costValue").setValue("기타");*/
+
+
+        this.costDetail = costDetail;
         //  this.costLinear = costLinear;
     }
 

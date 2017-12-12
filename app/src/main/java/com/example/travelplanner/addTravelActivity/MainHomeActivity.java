@@ -10,7 +10,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.travelplanner.R;
 import com.google.firebase.database.DataSnapshot;
@@ -55,7 +54,7 @@ public class MainHomeActivity extends AppCompatActivity {
 
         setting();//데이터베이스에서 데이터 불러와서 화면 설정(리사이클러뷰)
 
-        Toast.makeText(this,"preference값 : "+DBKey,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"preference값 : "+DBKey,Toast.LENGTH_SHORT).show();
 
     }
 

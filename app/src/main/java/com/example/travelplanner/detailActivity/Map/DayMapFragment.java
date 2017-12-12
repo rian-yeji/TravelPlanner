@@ -2,6 +2,7 @@ package com.example.travelplanner.detailActivity.Map;
 
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +37,9 @@ public class DayMapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView = null;
     private int dayposition;
+
+    private PolylineOptions polylineOptions;
+    private ArrayList<LatLng> arrayPoints =new ArrayList<LatLng>();
 
     Map_item map_item = new Map_item();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -157,15 +162,27 @@ public class DayMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng SEOUL = new LatLng(37.56, 126.97);
+       // LatLng SEOUL = new LatLng(37.56, 126.97);
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(SEOUL);
-        markerOptions.title("서울");
-        markerOptions.snippet("수도");
-        googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
 
+       for(Map_item m: map_items) {
+          // String input = m.getMarker();
+           LatLng location = new LatLng(m.getLatitude(), m.getLongitude());
+           markerOptions.position(location);
+           markerOptions.title(m.getMarker());
+           googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+           googleMap.addMarker(markerOptions);
+           googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+           polylineOptions = new PolylineOptions();
+
+           arrayPoints.add(location);
+
+           polylineOptions.color(Color.RED);
+           polylineOptions.width(5);
+           arrayPoints.add(location);
+           polylineOptions.addAll(arrayPoints);
+           googleMap.addPolyline(polylineOptions);
+       }
 
         //////빨간줄 그어주는 코드 --> setting datasnapshot뒤에
         /*polylineOptions = new PolylineOptions();
@@ -179,7 +196,7 @@ public class DayMapFragment extends Fragment implements OnMapReadyCallback {
         mMap.addPolyline(polylineOptions);*/
 
 
-       // String input = map_item.getMarker();
+       //
        /* m = mMap.addMarker(new MarkerOptions().position(location).title(input));*/
     }
 }
