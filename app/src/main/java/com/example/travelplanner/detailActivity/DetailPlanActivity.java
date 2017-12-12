@@ -149,6 +149,7 @@ public class DetailPlanActivity extends AppCompatActivity {
             if(detailFragment != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("dayposition", dayposition); // Object 넘기기
+                bundle.putSerializable("travel",travel);
                 dayMapFragment.setArguments(bundle);
                 addToBackFragment(dayMapFragment);
             } else {

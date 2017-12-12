@@ -1,6 +1,7 @@
 package com.example.travelplanner.detailActivity.Map;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.travelplanner.R;
+import com.example.travelplanner.addTravelActivity.Travel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +37,12 @@ public class DayMapFragment extends Fragment implements OnMapReadyCallback {
     private int dayposition;
 
     Map_item map_item = new Map_item();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef;
+    String DBKey;
+    Travel travel;
+
+    private ArrayList<Map_item> map_items = new ArrayList<Map_item>();
 
     public DayMapFragment() {
         // Required empty public constructor
@@ -39,13 +56,48 @@ public class DayMapFragment extends Fragment implements OnMapReadyCallback {
 
         Bundle bundle = getArguments();
         dayposition = bundle.getInt("dayposition");
+        travel = (Travel)(bundle.getSerializable("travel"));
         Log.i("dayposition","//"+dayposition);
 
         mapView = (MapView)view.findViewById(R.id.dayMap);
         mapView.getMapAsync(this);
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("prefDB",MODE_PRIVATE);
+        DBKey = preferences.getString("DBKey",""); //key,defaultValue
+        myRef = database.getReference(DBKey);
+
+        mapSetting(dayposition);
+
 
         return view;
+    }
+
+    public void mapSetting(int dayposition){
+        DatabaseReference reference = myRef.child(travel.getTitle()).child("Plan").child("Day"+dayposition).getRef();
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //plan0,1,2
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Log.i("DayMap","key="+snapshot.getKey());
+                    //Map_item map_item = snapshot.child("Map").getValue(Map_item.class);
+                    if(snapshot.child("Map").getValue()!=null) {
+                        Map_item map_item = new Map_item();
+                        map_item.setLatitude(snapshot.child("Map").child("latitude").getValue(Double.class));
+                        map_item.setLongitude(snapshot.child("Map").child("longitude").getValue(Double.class));
+                        map_item.setMarker(snapshot.child("Map").child("marker").getValue(String.class));
+
+                        map_items.add(map_item);
+                    }
+                }
+                Log.i("DayMap",""+map_items.get(0).marker);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
