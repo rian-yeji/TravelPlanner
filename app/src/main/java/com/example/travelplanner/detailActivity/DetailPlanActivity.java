@@ -125,6 +125,12 @@ public class DetailPlanActivity extends AppCompatActivity {
 
             }
         });
+
+        //=======================================미리 셋팅
+        myRef.child(travel.getTitle()).child("TotalCost").child("transport").setValue("0");
+        myRef.child(travel.getTitle()).child("TotalCost").child("eat").setValue("0");
+        myRef.child(travel.getTitle()).child("TotalCost").child("sleep").setValue("0");
+        myRef.child(travel.getTitle()).child("TotalCost").child("etc").setValue("0");
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

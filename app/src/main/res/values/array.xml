@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="cost">
-        <item >교통비</item>
-        <item >식비</item>
-        <item >숙박비</item>
-        <item >기타</item>
+        <item >transport</item>
+        <item >eat</item>
+        <item >sleep</item>
+        <item >etc</item>
     </string-array>
 </resources>

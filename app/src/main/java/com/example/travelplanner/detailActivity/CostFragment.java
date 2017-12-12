@@ -46,10 +46,11 @@ public class CostFragment extends Fragment {
     private Spinner spinner;
     private String costValue;
 
-    private int transport;
-    private int eat;
-    private int sleep;
-    private int etc;
+    private int transport=0;
+    private int eat=0;
+    private int sleep=0;
+    private int etc=0;
+
 
 
     public CostFragment() {
@@ -75,6 +76,12 @@ public class CostFragment extends Fragment {
         dayposition = bundle.getInt("dayposition");
         planposition = bundle.getInt("planposition");
 
+
+        /*myRef.child(travel.getTitle()).child("TotalCost").child("transport").setValue("0");
+        myRef.child(travel.getTitle()).child("TotalCost").child("eat").setValue("0");
+        myRef.child(travel.getTitle()).child("TotalCost").child("sleep").setValue("0");
+        myRef.child(travel.getTitle()).child("TotalCost").child("etc").setValue("0");*/
+
         setting();
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -88,13 +95,10 @@ public class CostFragment extends Fragment {
                 myRef.child(travel.getTitle()).child("Plan").child("Day" + dayposition).child("plan" + planposition).child("cost").setValue(costEdit.getText().toString());
                 myRef.child(travel.getTitle()).child("Plan").child("Day" + dayposition).child("plan" + planposition).child("costDetail").setValue(costDetailEdit.getText().toString());
 
-
-                myRef.child(travel.getTitle()).child("TotalCost").child("transport").setValue(transport + "");
-                myRef.child(travel.getTitle()).child("TotalCost").child("eat").setValue(eat + "");
-                myRef.child(travel.getTitle()).child("TotalCost").child("sleep").setValue(sleep + "");
-                myRef.child(travel.getTitle()).child("TotalCost").child("etc").setValue(etc + "");
-
+                String key = myRef.push().getKey();
+                myRef.child(travel.getTitle()).child("TotalCost").child(spinner.getSelectedItem().toString()).child(key).setValue(Integer.parseInt(costEdit.getText().toString()));
                 // myRef.child(travel.getTitle()).child("TotalCost").child(spinner.getSelectedItem().toString()))
+                //totalUpdate(spinner.getSelectedItem().toString(),costEdit.getText().toString());
 
                 replace();
             }
@@ -108,6 +112,36 @@ public class CostFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().remove(CostFragment.this).commit();
         fragmentManager.popBackStack();
+    }
+
+    public void totalUpdate(final String costValue , final String cost){
+        Log.i("yeji","value:"+costValue+" cost:"+cost);
+
+        String url = "https://travelplanner-42f43.firebaseio.com/" + DBKey + "/" + travel.getTitle() + "/TotalCost";
+        DatabaseReference reference = database.getReferenceFromUrl(url);
+
+        //reference.child(costValue).setValue(Integer.parseInt(cost));
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    if((snapshot.getKey()).equals(costValue)){
+                        String temp = snapshot.getValue(String.class);
+                        if(temp==null)
+                            temp="0";
+                        int total = Integer.parseInt(temp)+Integer.parseInt(cost);
+                        snapshot.getRef().setValue(String.valueOf(total));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void setting() {
@@ -130,13 +164,13 @@ public class CostFragment extends Fragment {
                         costDetail = snapshot.child("costDetail").getValue(String.class);
                         costValue = snapshot.child("costValue").getValue(String.class);
                         Log.e("costValue", costValue);
-                        if (costValue.equals("교통비")) {
+                        if (costValue.equals("transport")) {
                             spinner.setSelection(0);
-                        } else if (costValue.equals("식비")) {
+                        } else if (costValue.equals("eat")) {
                             spinner.setSelection(1);
-                        } else if (costValue.equals("숙박비")) {
+                        } else if (costValue.equals("sleep")) {
                             spinner.setSelection(2);
-                        } else if (costValue.equals("기타")) {
+                        } else if (costValue.equals("etc")) {
                             spinner.setSelection(3);
                         }
 
